@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media.Media3D;
+﻿using System.Windows;
 
 namespace Pacman.Models
 {
     abstract class GameObject
     {
-        public Vector3D GrigPosition;
+        public Vector GridPosition;
+        public GameObject(int Row,int Cell)
+        {
+            GridPosition.X = Row;
+            GridPosition.Y = Cell;
+        }
     }
 }

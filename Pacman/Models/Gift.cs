@@ -6,12 +6,16 @@ using System.Threading.Tasks;
 
 namespace Pacman.Models
 {
-    class Pacman:MoveObject
+    class Gift
     {
-        public Pacman(int Row,int Cell) : base(Row, Cell)
+        
+        public Gift()
         {
 
         }
-
+        public void Activate()
+        {
+            Console.WriteLine("Score++");
+        }
     }
 }

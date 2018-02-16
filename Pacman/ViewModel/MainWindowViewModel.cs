@@ -14,6 +14,7 @@ namespace Pacman.ViewModel
     class MainWindowViewModel: ViewModelBase
     {
         public Maze Maze = new Maze();
+        Random rnd = new Random();
         public int PacmanRowPos { get; set; } = 0;
         public int PacmanCallPos { get; set; } = 0;
         RelayCommand _pacmanGoRight;
@@ -31,6 +32,7 @@ namespace Pacman.ViewModel
         {
             PacmanCallPos++;
             RaisePropertyChanged("PacmanCallPos");
+            Console.WriteLine(rnd.Next(2));
         }
         #region Score
         public int Score { get; private set;}

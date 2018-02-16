@@ -1,203 +1,244 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Pacman.Models
 {
     class Maze
     {
-        private int[,] _maze;
-        private int[,] _likeTetrisMaze;
+        private GameObject[,] _maze;
+        GameObject[,] _halfMaze;
         private int height;
         private int width;
 
-        public Maze():this(20,18)
+        public Maze() : this(30, 30)
         {
-           
+
         }
-        public Maze(int height,int width)
+        public Maze(int height, int width)
         {
+            this.height = height;
+            this.width = width;
             int tetrisHeight = height;
             int tetrisWidth = width / 2;
-            _likeTetrisMaze = new TetrisMaze(tetrisHeight, tetrisWidth).GetMaze();
-            _maze = new int[height, width];
-            int current;
-            for(int i = 0; i < tetrisHeight; i++)
+            _halfMaze = new GameObject[tetrisHeight, tetrisWidth];
+            bool canInstallYet = true;
+            int countFals = 0;
+            while (countFals<100)
             {
-                int coll = 0;
-                current = _likeTetrisMaze[i, 0];
-                for (int j = 0; j < tetrisWidth; j++,coll++)
+                countFals++;
+                RandomBlock randomBlock= new RandomBlock();
+                for (int i = 1; i < tetrisHeight; i++)//1 line border
                 {
-                    if (_likeTetrisMaze[i, j] != current)
+                    for (int j = 0; j < tetrisWidth; j++)
                     {
-                        _maze[i, ++coll] = 1;
-                        current = _likeTetrisMaze[i, j];
-                    }
-                    else {
-                        _maze[i, coll] = 1;
-                    }
-                }
-            }
-            /*_maze[0, 1] = 1;
-            _maze[1, 1] = 1;
-            _maze[2, 1] = 1;
-            _maze[3, 1] = 1;
-            _maze[4, 1] = 1;
-            _maze[4, 2] = 1;
-            _maze[4, 3] = 1;
-            _maze[4, 4] = 1;
-            _maze[4, 5] = 1;
-            _maze[4, 6] = 1;
-            _maze[4, 7] = 1;
-            _maze[3, 7] = 1;
-            _maze[2, 7] = 1;
-            _maze[1, 7] = 1;
-            _maze[0, 7] = 1;*/
-
-        }
-        private class TetrisMaze 
-        {
-            private int[,] _maze;
-            private int height;
-            private int width;
-            public TetrisMaze(int height, int width)
-            {
-                this.height = height;
-                this.width = width;
-                _maze = new int[height, width];
-                FillMaze();
-                for (int i = 0; i < height; i++)
-                {
-                    for (int j = 0; j < width; j++)
-                    {
-                        Console.Write(_maze[i, j]+" ");
-                    }
-                    Console.WriteLine();
-                }
-            }
-            public int[,] GetMaze()
-            {
-                return _maze;
-            }
-            public void FillMaze()
-            {
-                Random rnd = new Random();
-                int marker = 1;
-                for(int i=0;i< height; i++)
-                {
-                    for(int j = 0; j < width; j++)
-                    {
-                        if (_maze[i, j] == 0)
+                        if ((_halfMaze[i,j]==null)&(tetrisWidth - j > randomBlock.Width) & (tetrisHeight - i > randomBlock.Height))
                         {
-                            switch (rnd.Next(2))
+                            canInstallYet = TrySetBlock(_halfMaze, i, j, randomBlock);
+                            if (canInstallYet)
                             {
-                                case 0:
-                                    {
-                                        if (!TrySetBlock2(i, j, marker))
-                                        {
-                                            TrySetBlock1(i, j, marker);
-                                        }
-                                    }break;
-                                case 1:
-                                    {
-                                        TrySetBlock1(i, j, marker);
-                                    }
-                                    break;
+                                countFals--;
+                                SetPath(_halfMaze);
+                                i = tetrisHeight;
+                                break;
                             }
-                            marker++;
                         }
                     }
                 }
-
             }
-            private bool TrySetBlock1(int i,int j,int marker)
-            {
-                // --- | block
-                if ((j + 2) < width)
-                {
-                    if((_maze[i, j+1] == 0)&& (_maze[i, j + 2] == 0))
-                    {
-                        _maze[i, j] =_maze[i, j+1] =_maze[i, j+2] = marker;
-                        return true;
-                    }
-                }
-                else if ((i + 2) < height)
-                {
-                    if ((_maze[i+1, j] == 0) && (_maze[i+2, j] == 0))
-                    {
-                        _maze[i, j] =_maze[i+1, j] =_maze[i+2, j] = marker;
-                        return true;
-                    }
-                }
-                return false;
-            }
-            private bool TrySetBlock2(int i, int j, int marker)
-            {
-                // L block
-                if (((j + 2) < width) && ((i + 2) < height))
-                {
-                    if ((_maze[i, j + 1] == 0) && (_maze[i, j + 2] == 0))
-                    {
-                        if ((_maze[i + 1, j] == 0) && (_maze[i + 2, j] == 0))
-                        {
-                            _maze[i, j] = _maze[i, j + 1] = _maze[i, j + 2] = _maze[i + 1, j] = _maze[i + 2, j] = marker;
-                            return true;
-                        } else if ((_maze[i + 1, j + 2] == 0) && (_maze[i + 2, j + 2] == 0))
-                        {
-                            _maze[i, j] = _maze[i, j + 1] = _maze[i, j + 2] = _maze[i + 1, j + 2] = _maze[i + 2, j + 2] = marker;
-                            return true;
-                        }
-                    } else if ((_maze[i + 1, j] == 0) && (_maze[i + 2, j] == 0))
-                    {
-                        if ((j >= 2) && (_maze[i + 2, j - 1] == 0) && (_maze[i + 2, j - 2] == 0))
-                        {
-                            _maze[i, j] = _maze[i + 1, j] = _maze[i + 2, j] = _maze[i + 2, j - 1] = _maze[i + 2, j - 2] = marker;
-                            return true;
-                        }
-                        else if ((_maze[i + 2, j + 1] == 0) && (_maze[i + 2, j + 2] == 0))
-                        {
-                            _maze[i, j] = _maze[i + 1, j] = _maze[i + 2, j] = _maze[i + 2, j + 1] = _maze[i + 2, j + 2] = marker;
-                            return true;
-                        }
-                    }
-
-                } 
-                return false;
-            }
-
+            SetBorder(_halfMaze);
+            MirrorReflect(_halfMaze);
+            FullMaze();
         }
-        public IEnumerable<Wall> Walls
+        private void FullMaze()
+        {
+            int rows = _maze.GetUpperBound(0) + 1;
+            int columns = _maze.Length / rows;
+            for (int i = 0; i < rows; i++)
+            {
+                for (int j = 0; j < columns; j++)
+                {
+                    if (_maze[i, j]==null)
+                    {
+                        _maze[i, j] = new Path(i, j);
+                    }
+                }
+            }
+        }
+        private void MirrorReflect(GameObject[,] halfMaze)
+        { 
+            _maze=new GameObject[height, width];
+            int rows = halfMaze.GetUpperBound(0) + 1;
+            int columns = halfMaze.Length / rows;
+            for (int i = 0; i < rows; i++)
+            {
+                for(int j = 0; j < columns; j++)
+                {
+                    if(halfMaze[i,j] is Wall)
+                    {
+                        _maze[i, columns - j - 1] = new Wall(i, columns - j - 1);
+                        _maze[i, columns + j] = halfMaze[i, j];
+                        _maze[i, columns + j].GridPosition.X = i;
+                        _maze[i, columns + j].GridPosition.Y = columns+j;
+                    }
+                }
+            }
+        }
+        private void SetPath(GameObject[,] maze)
+        {
+            int rows = maze.GetUpperBound(0) + 1;
+            int columns = maze.Length / rows;
+            for(int i = 0; i < rows-1; i++)
+            {
+                for(int j = 0; j < columns-1; j++)
+                {
+                    if(maze[i,j]is Wall)
+                    {
+                        if (maze[i, j + 1] == null)
+                        {
+                            maze[i, j + 1] = new Path(i, j + 1);
+                        }
+                        if (maze[i + 1, j] == null)
+                        {
+                            maze[i + 1, j] = new Path(i + 1, j);
+                        }
+                        if (maze[i+1, j + 1] == null)
+                        {
+                            maze[i+1, j + 1] = new Path(i+1, j + 1);
+                        }
+                        if ((j>1)&&(maze[i + 1, j-1] == null))
+                        {
+                            maze[i + 1, j-1] = new Path(i + 1, j);
+                        }
+
+                    }
+                }
+            }
+        }
+        private bool TrySetBlock(GameObject[,] maze,int i,int j,RandomBlock randomBlock)
+        {
+            foreach(var wall in randomBlock.ListWalls)
+            {
+                if (maze[i + (int)wall.GridPosition.X, j + (int)wall.GridPosition.Y] != null)
+                {
+                    return false;
+                }
+            }
+            foreach (var wall in randomBlock.ListWalls)
+            {
+                maze[i + (int)wall.GridPosition.X, j + (int)wall.GridPosition.Y] = wall;
+            }
+            foreach (var wall in randomBlock.ListWalls)
+            {
+                wall.GridPosition.X += i;
+                wall.GridPosition.Y += j;
+            }
+            return true;
+        }
+        private void SetBorder(GameObject[,] maze)
+        {
+            int rows = maze.GetUpperBound(0) + 1;
+            int columns = maze.Length / rows;
+            for(int i = 0; i < columns; i++)
+            {
+                maze[0, i] = new Wall(0, i);
+                maze[rows-1, i] = new Wall(rows-1, i);
+                if (columns - i > 2)
+                {
+                    maze[1, i] = new Path(1, i);
+                    maze[rows - 2, i] = new Path(rows - 2, i);
+                }
+                
+            }
+            for(int i = 1; i < rows-1; i++)
+            {
+                maze[i, columns - 1] = new Wall(i, columns - 1);
+                maze[i, columns - 2] = new Path(i, columns - 2);
+            }
+            int halfRows = rows / 2;
+            maze[halfRows - 3, 0] = new Path(halfRows - 3, 0);
+            maze[halfRows - 2, 0] = new Path(halfRows - 2, 0);
+            maze[halfRows - 1, 0] = new Path(halfRows - 1, 0);
+            maze[halfRows - 1, 1] = new Wall(halfRows - 1, 1);
+            maze[halfRows - 1, 2] = new Wall(halfRows - 1, 2);
+            maze[halfRows , 0] = new Path(halfRows, 0);
+            maze[halfRows, 1] = new Path(halfRows, 1);
+            maze[halfRows , 2] = new Wall(halfRows, 2);
+            maze[halfRows + 1, 0] = new Path(halfRows + 1, 0);
+            maze[halfRows + 1, 1] = new Path(halfRows + 1, 1);
+            maze[halfRows + 1, 2] = new Wall(halfRows + 1, 2);
+            maze[halfRows + 2, 0] = new Wall(halfRows + 2, 0);
+            maze[halfRows + 2, 1] = new Wall(halfRows + 2, 1);
+            maze[halfRows + 2, 2] = new Wall(halfRows + 2, 2);
+        }
+        public IEnumerable<Vector> Walls
         {
             get
             {
-                if (listWall == null)
+                if (listBricks == null)
                 {
-                    listWall = GetWall();
+                    listBricks = GetWall();
                 }
-                return listWall;
+                return listBricks;
             }
         }
-        private List<Wall> listWall;
-        public List<Wall> GetWall()
+        private List<Vector> listBricks;
+        public List<Vector> GetWall()
         {
-            List<Wall> listWall = new List<Wall>();
+            List<Vector> listWall = new List<Vector>();
             int rows = _maze.GetUpperBound(0) + 1;
             int columns = _maze.Length / rows;
             for (int i = 0; i < rows; i++)
             {
                 for(int j = 0; j < columns; j++)
                 {
-                    Console.Write(_maze[i, j]+" ");
-                    if (_maze[i, j] == 1)
+                    var wall= _maze[i, j] as Wall;
+                    if(wall!=null)
                     {
-                        listWall.Add(new Wall(i*5, j*5));
+                        foreach(var brick in wall.GetEnvironment(_maze))
+                        {
+                            listWall.Add(brick);
+                        }
                     } 
                 }
                 Console.WriteLine();
             }
             return listWall;
+        }
+        public IEnumerable<Vector> Gifts
+        {
+            get
+            {
+                if (listGifts == null)
+                {
+                    listGifts = GetAllPath();
+                }
+                return listGifts;
+            }
+        }
+        private List<Vector> listGifts;
+        public List<Vector> GetAllPath()
+        {
+            List<Vector> listPath = new List<Vector>();
+            int rows = _maze.GetUpperBound(0) + 1;
+            int columns = _maze.Length / rows;
+            for (int i = 0; i < rows; i++)
+            {
+                for (int j = 0; j < columns; j++)
+                {
+                    var path = _maze[i, j] as Path;
+                    if (path != null)
+                    {
+                        listPath.Add(path.GridPosition);
+                    }
+                }
+                Console.WriteLine();
+            }
+            return listPath;
         }
     }
 }

@@ -32,7 +32,7 @@
 
         <h:HelixViewport3D Name="Viewport" Grid.Row="1" Grid.ColumnSpan="3" Background="White" >
             <h:HelixViewport3D.DefaultCamera>
-                <PerspectiveCamera Position="5,-5,20" LookDirection="-5,5,-20" NearPlaneDistance="1.0" FarPlaneDistance="50" FieldOfView="60"/>
+                <PerspectiveCamera Position="5,-5,20" LookDirection="-5,5,-20" NearPlaneDistance="10.0" FarPlaneDistance="500" FieldOfView="60"/>
             </h:HelixViewport3D.DefaultCamera>
             <h:SunLight/>
             <h:FileModelVisual3D x:Name="player" Source="D:\gitHub\Pacman\Pacman\Resources\Models\Pacman\pacman.obj">
@@ -47,10 +47,11 @@
                         </RotateTransform3D>
                     </Transform3DGroup>
                 </h:FileModelVisual3D.Transform>
+                
             </h:FileModelVisual3D>
-            
-            
-            <h:GridLinesVisual3D Width="20" Length="20" MinorDistance="1" MajorDistance="1" Thickness="0.01"/>
+
+            <h:GridLinesVisual3D Width="45" Length="45" MinorDistance="1.5" MajorDistance="1.5" Thickness="0.01" Center="22.5 22.5  0"/>
+
         </h:HelixViewport3D>
     </Grid>
     <Window.InputBindings>
