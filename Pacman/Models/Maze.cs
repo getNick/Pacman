@@ -5,10 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Collections.ObjectModel;
 
 namespace Pacman.Models
 {
-    class Maze
+    class Maze:IMaze
     {
         private GameObject[,] _maze;
         GameObject[,] _halfMaze;
@@ -175,17 +176,7 @@ namespace Pacman.Models
             maze[halfRows + 2, 1] = new Wall(halfRows + 2, 1);
             maze[halfRows + 2, 2] = new Wall(halfRows + 2, 2);
         }
-        public IEnumerable<Vector> Walls
-        {
-            get
-            {
-                if (listBricks == null)
-                {
-                    listBricks = GetWall();
-                }
-                return listBricks;
-            }
-        }
+
         private List<Vector> listBricks;
         public List<Vector> GetWall()
         {
@@ -209,21 +200,22 @@ namespace Pacman.Models
             }
             return listWall;
         }
-        public IEnumerable<Vector> Gifts
+
+        public IEnumerable<Vector> Walls
         {
             get
             {
-                if (listGifts == null)
+                if (listBricks == null)
                 {
-                    listGifts = GetAllPath();
+                    listBricks = GetWall();
                 }
-                return listGifts;
+                return listBricks;
             }
         }
-        private List<Vector> listGifts;
-        public List<Vector> GetAllPath()
+        private ObservableCollection<Path> listGifts;
+        public ObservableCollection<Path> GetAllPath()
         {
-            List<Vector> listPath = new List<Vector>();
+            ObservableCollection<Path> listPath = new ObservableCollection<Path>();
             int rows = _maze.GetUpperBound(0) + 1;
             int columns = _maze.Length / rows;
             for (int i = 0; i < rows; i++)
@@ -233,12 +225,39 @@ namespace Pacman.Models
                     var path = _maze[i, j] as Path;
                     if (path != null)
                     {
-                        listPath.Add(path.GridPosition);
+                        listPath.Add(path);
                     }
                 }
-                Console.WriteLine();
             }
             return listPath;
+        }
+        public ObservableCollection<Path> Gifts {
+            get
+            {
+                if (listGifts == null)
+                {
+                    listGifts = GetAllPath();
+                }
+                return listGifts;
+            }
+        }
+
+        public bool StepTo(int i, int j,MoveObject moveObject=null)
+        {
+            if ((i < 0) || (i >= height) || (j < 0) || (j >= width))
+            {
+                return false;
+            }
+            var path = _maze[i, j] as Path;
+            if (path != null)
+            {
+                if(moveObject is Pacman)
+                {
+                    path.UseGift();
+                }
+                return true;
+            }
+            return false;
         }
     }
 }
