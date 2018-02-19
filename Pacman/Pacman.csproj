@@ -87,9 +87,15 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\Enemy.cs" />
+    <Compile Include="Models\IEnemy.cs" />
     <Compile Include="Models\IMaze.cs" />
-    <Compile Include="Models\IPlayer.cs" />
+    <Compile Include="Models\IMoveObject.cs" />
+    <Compile Include="Models\IGameObject.cs" />
+    <Compile Include="Models\IPacman.cs" />
     <Compile Include="Models\MoveObject.cs" />
+    <Compile Include="Models\IPlayer.cs" />
+    <Compile Include="Models\NewEnemy.cs" />
     <Compile Include="Models\Player.cs" />
     <Compile Include="Models\RandomBlock.cs" />
     <Compile Include="Models\GameObject.cs" />

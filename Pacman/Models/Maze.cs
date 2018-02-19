@@ -83,8 +83,7 @@ namespace Pacman.Models
                     {
                         _maze[i, columns - j - 1] = new Wall(i, columns - j - 1);
                         _maze[i, columns + j] = halfMaze[i, j];
-                        _maze[i, columns + j].GridPosition.X = i;
-                        _maze[i, columns + j].GridPosition.Y = columns+j;
+                        _maze[i, columns + j].GridPosition = new Vector(i,columns+j);
                     }
                 }
             }
@@ -135,8 +134,7 @@ namespace Pacman.Models
             }
             foreach (var wall in randomBlock.ListWalls)
             {
-                wall.GridPosition.X += i;
-                wall.GridPosition.Y += j;
+                wall.GridPosition = new Vector(wall.GridPosition.X + i, wall.GridPosition.Y + j);
             }
             return true;
         }
@@ -242,19 +240,16 @@ namespace Pacman.Models
             }
         }
 
-        public bool StepTo(int i, int j,MoveObject moveObject=null)
+        public bool StepTo(int i, int j)
         {
             if ((i < 0) || (i >= height) || (j < 0) || (j >= width))
             {
                 return false;
             }
-            var path = _maze[i, j] as Path;
-            if (path != null)
+            
+            if (_maze[i, j] is Path)
             {
-                if(moveObject is Pacman)
-                {
-                    path.UseGift();
-                }
+                
                 return true;
             }
             return false;

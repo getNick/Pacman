@@ -8,11 +8,11 @@
         xmlns:c="clr-namespace:CalcBinding;assembly=CalcBinding"
         mc:Ignorable="d"
         Title="MainWindow" Height="770" Width="720" Background="Black">
-    <Window.DataContext>
-        <local:MainWindowViewModel></local:MainWindowViewModel>
-    </Window.DataContext>
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="ConverterBoolToVis" />
+    </Window.Resources>
     
-    <Grid>
+    <Grid Name="GridHandler">
         <Grid.RowDefinitions>
             <RowDefinition Height="50" ></RowDefinition>
             <RowDefinition></RowDefinition>
@@ -25,17 +25,18 @@
         <Button Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" BorderThickness="0" Foreground="White" FontSize="25" FontFamily="Comic Sanc" Content="New game"
             Command="{Binding ScoreInc}">
         </Button>
-        <TextBlock Grid.Row="0" Grid.Column="1"  VerticalAlignment="Center" HorizontalAlignment="Center" Name="ScoreText" Foreground="White" FontSize="25"
-            Text="{Binding Path=Score, StringFormat='Score: {0}', UpdateSourceTrigger=PropertyChanged}">
+        <TextBlock Grid.Row="0" Grid.Column="1" Visibility="{Binding Path=IsVisible, Converter={StaticResource ConverterBoolToVis}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Center" Name="ScoreText" Foreground="White" FontSize="25"
+            Text="{Binding Path=Score, StringFormat='Score: {0}', UpdateSourceTrigger=PropertyChanged}" >
         </TextBlock>
-        <TextBlock Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="TimeLeftText" Foreground="White" FontSize="25"><Run Text="Time left:100"/></TextBlock>
+        
 
-        <h:HelixViewport3D Name="Viewport" Grid.Row="1" Grid.ColumnSpan="3" Background="White" >
+        <h:HelixViewport3D Name="Viewport" Grid.Row="1" Grid.ColumnSpan="3" Background="White">
             <h:HelixViewport3D.DefaultCamera>
                 <PerspectiveCamera Position="5,-5,20" LookDirection="-5,5,-20" NearPlaneDistance="10.0" FarPlaneDistance="500" FieldOfView="60"/>
             </h:HelixViewport3D.DefaultCamera>
             <h:SunLight/>
-            <h:FileModelVisual3D x:Name="player" Source="D:\gitHub\Pacman\Pacman\Resources\Models\Pacman\pacman.obj">
+            
+            <h:FileModelVisual3D x:Name="player" Source="D:\gitHub\Pacman\Pacman\Resources\Models\Pacman\pacman.obj"   >
                 <h:FileModelVisual3D.Transform>
                     <Transform3DGroup >
                         <TranslateTransform3D OffsetX="{c:Binding PacmanRowPos*20, UpdateSourceTrigger=PropertyChanged}" OffsetY="0.0"  OffsetZ="{c:Binding PacmanCallPos*15+5,UpdateSourceTrigger=PropertyChanged}"/>
@@ -47,7 +48,6 @@
                         </RotateTransform3D>
                     </Transform3DGroup>
                 </h:FileModelVisual3D.Transform>
-                
             </h:FileModelVisual3D>
 
             <h:GridLinesVisual3D Width="45" Length="45" MinorDistance="1.5" MajorDistance="1.5" Thickness="0.01" Center="22.5 22.5  0"/>

@@ -2,13 +2,12 @@
 
 namespace Pacman.Models
 {
-    abstract class GameObject
+    abstract class GameObject:IGameObject
     {
-        public Vector GridPosition;
+        public Vector GridPosition { get;set; }
         public GameObject(int Row,int Cell)
         {
-            GridPosition.X = Row;
-            GridPosition.Y = Cell;
+            GridPosition = new Vector(Row, Cell);
         }
     }
 }

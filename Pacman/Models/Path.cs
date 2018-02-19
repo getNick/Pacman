@@ -9,12 +9,12 @@ namespace Pacman.Models
     class Path:GameObject
     {
         private Gift _gift;
-        private bool haveGift = false;
+        private bool haveGift = true;
         public Path(int Row,int Cell) : base(Row, Cell)
         {
             _gift = new Gift();
         }
-        public void Enter()
+        public void UseGift()
         {
             if (haveGift)
             {

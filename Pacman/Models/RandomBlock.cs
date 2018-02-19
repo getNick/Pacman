@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Pacman.Models
 {
@@ -57,12 +58,9 @@ namespace Pacman.Models
         }
         private static void TransposeFigure(List<Wall> figure)
         {
-            double temp;
             foreach (var wall in figure)
             {
-                temp = wall.GridPosition.X;
-                wall.GridPosition.X = wall.GridPosition.Y;
-                wall.GridPosition.X = temp;
+                wall.GridPosition = new Vector(wall.GridPosition.Y, wall.GridPosition.X);
             }
         }
         private static void Normalize(List<Wall> figure)
@@ -74,8 +72,7 @@ namespace Pacman.Models
             }
             foreach(var wall in figure)
             {
-                
-                wall.GridPosition.Y += offset;
+                wall.GridPosition = new Vector(wall.GridPosition.X, wall.GridPosition.Y + offset);
             }
         }
     }

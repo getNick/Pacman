@@ -14,7 +14,7 @@ namespace Pacman.Models
         {
             
         }
-        public List<Vector> GetEnvironment(GameObject[,] maze)
+        public IEnumerable<Vector> GetEnvironment(GameObject[,] maze)
         {
             int j = (int)GridPosition.Y;
             int i = (int)GridPosition.X;
