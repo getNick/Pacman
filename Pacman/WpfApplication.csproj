@@ -87,23 +87,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\Enemy.cs" />
-    <Compile Include="Models\IEnemy.cs" />
-    <Compile Include="Models\IMaze.cs" />
-    <Compile Include="Models\IMoveObject.cs" />
-    <Compile Include="Models\IGameObject.cs" />
-    <Compile Include="Models\IPacman.cs" />
-    <Compile Include="Models\MoveObject.cs" />
-    <Compile Include="Models\IPlayer.cs" />
-    <Compile Include="Models\NewEnemy.cs" />
-    <Compile Include="Models\Player.cs" />
-    <Compile Include="Models\RandomBlock.cs" />
-    <Compile Include="Models\GameObject.cs" />
-    <Compile Include="Models\Gift.cs" />
-    <Compile Include="Models\Path.cs" />
-    <Compile Include="Models\Maze.cs" />
-    <Compile Include="Models\Pacman.cs" />
-    <Compile Include="Models\Wall.cs" />
     <Compile Include="Utils\RelayCommand.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
@@ -155,6 +138,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Models\Gift\defGift.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

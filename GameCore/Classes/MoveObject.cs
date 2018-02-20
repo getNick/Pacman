@@ -1,28 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using GameCore.Enums;
+using GameCore.Interfaces;
+using System;
 using System.Windows;
 
-namespace Pacman.Models
+namespace GameCore.Classes
 {
-    class MoveObject:GameObject,IMoveObject
+    public class MoveObject:GameObject,IMoveObject
     {
         public IMaze Maze { get;}
         public Direction Direction { get; set; }
-
+        private DateTime _lastStepTime;
         public MoveObject(int Row,int Cell, IMaze maze) :base(Row,Cell)
         {
-            if (maze == null)
-            {
-                throw new ArgumentNullException("Maze");
-            }
-            Maze = maze;
+            Maze = maze ?? throw new ArgumentNullException("Maze");
             Direction = Direction.Left;
+            _lastStepTime = DateTime.Now;
         }
         public virtual bool Step()
         {
+            DateTime timeNow = DateTime.Now;
+            if ((timeNow - _lastStepTime).TotalMilliseconds > 500)
+            {
+                return false;
+            }
             bool succesfull = false;
             switch (Direction)
             {
@@ -32,8 +32,7 @@ namespace Pacman.Models
                     {
                         GridPosition = new Vector(GridPosition.X - 1, GridPosition.Y);
                         succesfull = true;
-                        //pause
-                    }
+                        }
                 }break;
                 case Direction.Up:
                 {

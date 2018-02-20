@@ -4,11 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pacman.Models
+namespace GameService.Services
 {
-    interface IEnemy:IMoveObject
+    class PlayerService
     {
-        IPacman Pacman { get;}
-        
     }
 }

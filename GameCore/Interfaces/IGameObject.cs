@@ -1,8 +1,8 @@
 ﻿using System.Windows;
 
-namespace Pacman.Models
+namespace GameCore.Interfaces
 {
-    interface IGameObject
+    public interface IGameObject
     {
         Vector GridPosition { get; set; }
     }

@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media.Media3D;
-using Pacman.Models;
-using Pacman.Utils;
+using WpfApplication.Models;
+using WpfApplication.Utils;
 
-namespace Pacman.ViewModel
+namespace WpfApplication.ViewModel
 {
     class MainWindowViewModel:ViewModelBase
     {

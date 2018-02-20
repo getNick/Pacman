@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pacman.ViewModel
+namespace WpfApplication.ViewModel
 {
     public abstract class ViewModelBase : INotifyPropertyChanged, IDisposable
     {

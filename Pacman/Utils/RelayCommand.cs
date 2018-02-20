@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace Pacman.Utils
+namespace WpfApplication.Utils
 {
     class RelayCommand : ICommand
     {

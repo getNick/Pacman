@@ -1,22 +1,20 @@
-﻿using System;
+﻿using GameCore.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
-namespace Pacman.Models
+
+namespace GameCore.Classes
 {
-    class RandomBlock
+    public class RandomBlock : IBlock
     {
-        static int count = 0;
         static Random rnd = new Random();
-        public int Height { get; private set;}
-        public int Width { get; private set; }
-        public IEnumerable<Wall> ListWalls;
+        public int Height { get; set; }
+        public int Width { get; set; }
+        public IEnumerable<Wall> Walls { get; set; }
         public RandomBlock()
         {
-            count++;
             List<Wall> figure = new List<Wall>();
             int lenght = rnd.Next(3, 4);
             for (int i = 0; i < lenght; i++)
@@ -54,7 +52,7 @@ namespace Pacman.Models
             }
             Height = (int)figure.Max((f) => f.GridPosition.X);
             Width = (int)figure.Max((f) => f.GridPosition.Y);
-            ListWalls = figure;
+            Walls = figure;
         }
         private static void TransposeFigure(List<Wall> figure)
         {
@@ -70,11 +68,11 @@ namespace Pacman.Models
             {
                 return;
             }
-            foreach(var wall in figure)
+            foreach (var wall in figure)
             {
                 wall.GridPosition = new Vector(wall.GridPosition.X, wall.GridPosition.Y + offset);
             }
         }
+
     }
-    
 }

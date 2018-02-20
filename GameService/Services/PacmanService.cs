@@ -1,19 +1,20 @@
-﻿using System;
+﻿using GameCore.Classes;
+using GameCore.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pacman.Models
+namespace GameService.Services
 {
-    class Pacman:MoveObject,IPacman, INotifyPropertyChanged
+    class PacmanService : MoveObject, IPacman, INotifyPropertyChanged
     {
-        public int Lifes { get; }
-        private int _lifes;
-        public Pacman(int Row,int Cell,IMaze maze) : base(Row, Cell,maze)
+        public int Lifes { get; set; }
+        public PacmanService(int Row, int Cell, IMaze maze) : base(Row, Cell, maze)
         {
-            _lifes = 3;
+            Lifes = 3;
         }
         public override bool Step()
         {
@@ -26,7 +27,7 @@ namespace Pacman.Models
         }
         private void UseGift()
         {
-            var Path=Maze.Gifts.First((x) => x.GridPosition.X == this.GridPosition.X & x.GridPosition.Y == this.GridPosition.Y);
+            var Path = Maze.Paths.First((x) => x.GridPosition.X == this.GridPosition.X & x.GridPosition.Y == this.GridPosition.Y);
             Path.UseGift();
         }
         public void UseAdditionalLife()
@@ -37,7 +38,7 @@ namespace Pacman.Models
             }
             else
             {
-                _lifes--;
+                Lifes--;
                 OnPropertyChanged("Lifes");
             }
         }

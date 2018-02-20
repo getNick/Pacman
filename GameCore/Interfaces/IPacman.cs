@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pacman.Models
+namespace GameCore.Interfaces
 {
-    interface IPacman:IMoveObject
+    public interface IPacman : IMoveObject
     {
-        int Lifes { get;}
+        int Lifes { get; }
         void UseAdditionalLife();
-        
+
     }
 }
