@@ -10,7 +10,7 @@ namespace GameService.Services
 {
     class MazeService
     {
-        IMaze Maze;
+        public IMaze Maze;
         public MazeService(int height, int width)
         {
             Maze = new Maze(height, width);

@@ -8,7 +8,7 @@ using System.Windows;
 
 namespace GameCore.Classes
 {
-    class AStarAlgo : IPursueAlgo
+    public class AStarAlgo : IPursueAlgo
     {
         public IMaze Maze { get;private set; }
         public AStarAlgo(IMaze maze)

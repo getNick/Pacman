@@ -1,4 +1,6 @@
 ﻿using Autofac;
+using GameCore.Interfaces;
+using GameCore.Classes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +16,14 @@ namespace GameService.Services
         {
             MazeService mazeService = new MazeService(30,30);
             var builder = new ContainerBuilder();
-            builder.RegisterType<>().As<>();
+            //builder.RegisterControllers(typeof().Assembly);
+            builder.RegisterInstance(mazeService.Maze).As<IMaze>();
+            builder.RegisterType<PacmanService>().As<IPacman>();
+            Container=builder.Build();
+            
+            builder.RegisterType<AStarAlgo>().As<IPursueAlgo>().WithParameter(new TypedParameter(typeof(IMaze), Container.Resolve<IMaze>()));
+
+            EnemyService enemyService = new EnemyService(3, Container.Resolve<IMaze>(), Container.Resolve<IPacman>(), Container.Resolve<IPursueAlgo>());
         }
        
     }
