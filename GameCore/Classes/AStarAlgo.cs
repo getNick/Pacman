@@ -11,21 +11,32 @@ namespace GameCore.Classes
     public class AStarAlgo : IPursueAlgo
     {
         public IMaze Maze { get;private set; }
+        private Queue<Tail> QueSteps;
         public AStarAlgo(IMaze maze)
         {
             Maze = maze ?? throw new ArgumentNullException("Maze");
+            QueSteps = new Queue<Tail>();
         }
 
         public Vector NextStep(Vector from, Vector to)
         {
+            if (QueSteps.Count == 0)
+            {
+                GetNextSteps(5, from, to, QueSteps);
+            }
+            var temp = QueSteps.Dequeue();
+            return new Vector(temp.Rows, temp.Cell);
+        }
+        private void GetNextSteps(int count, Vector from, Vector to,Queue<Tail> queue)
+        {
             List<Tail> Closed = new List<Tail>();
             List<Tail> Open = new List<Tail>();
-            foreach(var path in Maze.Paths)
+            foreach (var path in Maze.Paths)
             {
                 var tail = new Tail((int)path.GridPosition.X, (int)path.GridPosition.Y);
                 Closed.Add(tail);
             }
-            if ((from.X < 0) | (from.X >= Maze.Height)|(from.Y < 0) | (from.Y >= Maze.Width))
+            if ((from.X < 0) | (from.X >= Maze.Height) | (from.Y < 0) | (from.Y >= Maze.Width))
             {
                 throw new ArgumentOutOfRangeException();
             }
@@ -36,28 +47,35 @@ namespace GameCore.Classes
             Tail start = Closed.First(x => x.Rows == from.X & x.Cell == from.Y);
             start.SetParam(null, 0);
             Tail current;
-            
+
             Tail end = Closed.First(x => x.Rows == to.X & x.Cell == to.Y);
-            while (Closed.Count>0)
+            while (Closed.Count > 0)
             {
                 current = FindNearest(Open, end);
                 if (current == end)
                 {
                     break;
                 }
-                var neighbors=GetNeighbors(current, Closed);
-                foreach(var n in neighbors)
+                var neighbors = GetNeighbors(current, Closed);
+               
+                foreach (var n in neighbors)
                 {
                     Closed.Remove(n);
                     Open.Add(n);
                     n.SetParam(current, current.Cost + 1);
                 }
             }
+            List<Tail> tempList = new List<Tail>();
             while (end.Parent != start)
             {
+                tempList.Add(end);
                 end = end.Parent;
             }
-            return new Vector(end.Rows, end.Cell);
+            tempList.Reverse();
+            for(int i = 0; (i < tempList.Count)&(i<count); i++)
+            {
+                queue.Enqueue(tempList[i]);
+            }
         }
         private List<Tail> GetNeighbors(Tail current,List<Tail> list)
         {
