@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace GameService.Services
 {
-    class PacmanService : MoveObject, IPacman, INotifyPropertyChanged
+    public class PacmanService : MoveObject, IPacman, INotifyPropertyChanged
     {
         public int Lifes { get; set; }
         public PacmanService(int Row, int Cell, IMaze maze) : base(Row, Cell, maze)

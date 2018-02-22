@@ -6,17 +6,23 @@ using System.Threading.Tasks;
 using System.Configuration;
 using WpfApplication.Utils;
 using System.Windows.Input;
+using System.Windows.Controls;
+using WpfApplication.Views;
+using Autofac;
 
 namespace WpfApplication.ViewModel
 {
     class StartPageViewModel:ViewModelBase
     {
+       
         private const string NonRegister= "к сожелению,\n мы еще не знакомы";
         public bool NewPlayer { get; set; } = true;
         public string PlayerName { get; set; }
+        private Configuration config;
         public StartPageViewModel()
         {
-           var confName= ConfigurationManager.AppSettings["PlayerName"];
+            config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var confName = config.AppSettings.Settings["PlayerName"].Value;
             if (confName.Length > 1)
             {
                 PlayerName = confName;
@@ -78,13 +84,16 @@ namespace WpfApplication.ViewModel
             get
             {
                 if (_startGame == null)
-                    _startGame = new RelayCommand(ResetName);
+                    _startGame = new RelayCommand(StartGame);
                 return _startGame;
             }
         }
         private void StartGame(object parameter)
         {
-
+            config.AppSettings.Settings["PlayerName"].Value= PlayerName;
+            config.Save(ConfigurationSaveMode.Modified);
+            var currentPage = App.container.Resolve<MainWindowViewModel>();
+            currentPage.CurrentPage = new MainGamePage();
         }
         #endregion
     }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace GameService.Services
 {
-    class EnemyService
+    public class EnemyService
     {
         List<Enemy> ListEnemies;
         IPacman Pacman;

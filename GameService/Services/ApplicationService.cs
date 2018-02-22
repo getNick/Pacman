@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace GameService.Services
 {
-    class ApplicationService
+    public class ApplicationService
     {
         IContainer Container { get;}
         public ApplicationService()
@@ -17,13 +17,16 @@ namespace GameService.Services
             MazeService mazeService = new MazeService(30,30);
             var builder = new ContainerBuilder();
             //builder.RegisterControllers(typeof().Assembly);
-            builder.RegisterInstance(mazeService.Maze).As<IMaze>();
+            builder.RegisterType<PlayerService>();
+            //builder.RegisterInstance(mazeService.Maze).As<IMaze>();
             builder.RegisterType<PacmanService>().As<IPacman>();
             Container=builder.Build();
             
-            builder.RegisterType<AStarAlgo>().As<IPursueAlgo>().WithParameter(new TypedParameter(typeof(IMaze), Container.Resolve<IMaze>()));
+            //builder.RegisterType<AStarAlgo>().As<IPursueAlgo>().WithParameter(new TypedParameter(typeof(IMaze), Container.Resolve<IMaze>()));
 
-            EnemyService enemyService = new EnemyService(3, Container.Resolve<IMaze>(), Container.Resolve<IPacman>(), Container.Resolve<IPursueAlgo>());
+            //EnemyService enemyService = new EnemyService(3, Container.Resolve<IMaze>(), Container.Resolve<IPacman>(), Container.Resolve<IPursueAlgo>());
+            
+            //GiftsService giftsService = new GiftsService(Container.Resolve<IMaze>(), Container.Resolve<IPlayer>());
         }
        
     }

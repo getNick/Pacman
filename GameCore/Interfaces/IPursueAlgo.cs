@@ -10,7 +10,6 @@ namespace GameCore.Interfaces
     public interface IPursueAlgo
     {
         IMaze Maze { get;}
-
         Vector NextStep(Vector from, Vector to);
     }
 }

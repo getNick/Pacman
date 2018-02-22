@@ -5,7 +5,7 @@ using System;
 
 namespace GameService.Services
 {
-    class GiftsService
+    public class GiftsService
     {
         private IMaze Maze;
         private IPlayer Player;
