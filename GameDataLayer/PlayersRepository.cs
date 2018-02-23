@@ -1,54 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GameCore.Classes;
 using GameCore.Interfaces;
 
 namespace GameDataLayer
 {
-    public class PlayersRepository : IPlayersRepository, IDisposable
+    public class PlayersRepository : Repository<Player>,IPlayersRepository
     {
-
-        private PlayersContext context;
-
-        public PlayersRepository(PlayersContext context)
+        public PlayersRepository(DbContext dbContext) : base(dbContext)
         {
-            this.context = context;
         }
-
-        public IEnumerable<IPlayer> GetPlayers()
-        {
-            return context.Players.ToList();
-        }
-
-        public void InsertPlayer(IPlayer player)
-        {
-            context.Players.Add(player);
-        }
-
-        public void Save()
-        {
-            context.SaveChanges();
-        }
-        private bool disposed = false;
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!this.disposed)
-            {
-                if (disposing)
-                {
-                    context.Dispose();
-                }
-            }
-            this.disposed = true;
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
+        public IQueryable<Player> GetTop(int count) {
+            return _dbSet.OrderBy(x => x.Score).Take(count);
         }
     }
 }

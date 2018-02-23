@@ -1,4 +1,5 @@
-﻿using GameCore.Interfaces;
+﻿using GameCore.Classes;
+using GameCore.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,10 +8,8 @@ using System.Threading.Tasks;
 
 namespace GameDataLayer
 {
-    public interface IPlayersRepository
+    public interface IPlayersRepository:IRepository<Player>
     {
-        IEnumerable<IPlayer> GetPlayers();
-        void InsertPlayer(IPlayer player);
-        void Save();
+        IQueryable<Player> GetTop(int count);
     }
 }
