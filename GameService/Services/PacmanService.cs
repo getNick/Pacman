@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace GameService.Services
 {
-    public class PacmanService : MoveObject, IPacman, INotifyPropertyChanged
+    public class PacmanService : MoveObject, IPacman
     {
         public int Lifes { get; set; }
-        public PacmanService(int Row, int Cell, IMaze maze) : base(Row, Cell, maze)
+        public PacmanService(IMaze maze): base((int)maze.PacmenPespoint.X, (int)maze.PacmenPespoint.Y,maze)
         {
             Lifes = 3;
         }
@@ -20,6 +20,8 @@ namespace GameService.Services
         {
             if (base.Step())
             {
+                OnPropertyChanged("Row");
+                OnPropertyChanged("Cell");
                 UseGift();
                 return true;
             }
@@ -27,7 +29,7 @@ namespace GameService.Services
         }
         private void UseGift()
         {
-            var Path = Maze.Paths.First((x) => x.GridPosition.X == this.GridPosition.X & x.GridPosition.Y == this.GridPosition.Y);
+            var Path = Maze.Paths.First((x) => x.Row == this.Row & x.Cell == this.Cell);
             Path.UseGift();
         }
         public void UseAdditionalLife()
@@ -40,16 +42,6 @@ namespace GameService.Services
             {
                 Lifes--;
                 OnPropertyChanged("Lifes");
-            }
-        }
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public virtual void OnPropertyChanged(string propertyName)
-        {
-            PropertyChangedEventHandler handler = this.PropertyChanged;
-            if (handler != null)
-            {
-                handler.Invoke(this, new PropertyChangedEventArgs(propertyName));
             }
         }
 

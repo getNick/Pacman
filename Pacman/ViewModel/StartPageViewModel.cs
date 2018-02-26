@@ -9,6 +9,7 @@ using System.Windows.Input;
 using System.Windows.Controls;
 using WpfApplication.Views;
 using Autofac;
+using GameCore.Interfaces;
 
 namespace WpfApplication.ViewModel
 {
@@ -20,12 +21,11 @@ namespace WpfApplication.ViewModel
         public string PlayerName { get; set; }
         private Configuration config;
         public StartPageViewModel()
-        {
+        { 
             config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            var confName = config.AppSettings.Settings["PlayerName"].Value;
-            if (confName.Length > 1)
+            PlayerName = config.AppSettings.Settings["PlayerName"].Value;
+            if (PlayerName.Length > 1)
             {
-                PlayerName = confName;
                 NewPlayer = false;
             }
             else
@@ -90,9 +90,9 @@ namespace WpfApplication.ViewModel
         }
         private void StartGame(object parameter)
         {
-            config.AppSettings.Settings["PlayerName"].Value= PlayerName;
+            config.AppSettings.Settings["PlayerName"].Value = PlayerName;
             config.Save(ConfigurationSaveMode.Modified);
-            var currentPage = App.container.Resolve<MainWindowViewModel>();
+            var currentPage = App.ViewContainer.Resolve<MainWindowViewModel>();
             currentPage.CurrentPage = new MainGamePage();
         }
         #endregion

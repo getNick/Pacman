@@ -13,6 +13,7 @@ namespace GameService.Services
         {
             Maze = maze ?? throw new ArgumentNullException("Maze");
             Player = player ?? throw new ArgumentNullException("Player");
+            SetGifts();
         }
         public void SetGifts()
         {

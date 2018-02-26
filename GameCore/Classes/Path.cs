@@ -16,6 +16,7 @@ namespace GameCore.Classes
         {
             Gift = gift ?? throw new ArgumentNullException("Gift");
             HaveGift = true;
+            OnPropertyChanged("HaveGift");
         }
         public void UseGift()
         {
@@ -23,16 +24,7 @@ namespace GameCore.Classes
             {
                 Gift.Activate();
                 HaveGift = false;
-            }
-        }
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public virtual void OnPropertyChanged(string propertyName)
-        {
-            PropertyChangedEventHandler handler = this.PropertyChanged;
-            if (handler != null)
-            {
-                handler.Invoke(this, new PropertyChangedEventArgs(propertyName));
+                OnPropertyChanged("HaveGift");
             }
         }
     }

@@ -19,6 +19,7 @@ namespace GameService.Services
         public ObservableCollection<Path> Paths { get; set; }
 
         public Vector EnemyRespoint { get; set; }
+        public Vector PacmenPespoint { get; set; } = new Vector(1, 1);
         public MazeService(int height, int width)
         {
             Height = height;
@@ -86,7 +87,8 @@ namespace GameService.Services
                     {
                         maze[i, columns - j - 1] = new Wall(i, columns - j - 1);
                         maze[i, columns + j] = halfMaze[i, j];
-                        maze[i, columns + j].GridPosition = new Vector(i, columns + j);
+                        maze[i, columns + j].Row = i;
+                        maze[i, columns + j].Cell = columns + j;
                     }
                 }
             }
@@ -126,18 +128,19 @@ namespace GameService.Services
         {
             foreach (var wall in randomBlock.Walls)
             {
-                if (maze[i + (int)wall.GridPosition.X, j + (int)wall.GridPosition.Y] != null)
+                if (maze[i + wall.Row, j + wall.Cell] != null)
                 {
                     return false;
                 }
             }
             foreach (var wall in randomBlock.Walls)
             {
-                maze[i + (int)wall.GridPosition.X, j + (int)wall.GridPosition.Y] = wall;
+                maze[i + wall.Row, j + wall.Cell] = wall;
             }
             foreach (var wall in randomBlock.Walls)
             {
-                wall.GridPosition = new Vector(wall.GridPosition.X + i, wall.GridPosition.Y + j);
+                wall.Row += i;
+                wall.Cell += j;
             }
             return true;
         }
@@ -175,8 +178,8 @@ namespace GameService.Services
             maze[halfRows - 1, 1] = new Wall(halfRows - 1, 1);
             maze[halfRows - 1, 2] = new Wall(halfRows - 1, 2);
             maze[halfRows, 0] = new Path(halfRows, 0);
-            resp.X = halfRows;
-            resp.Y = 0;
+            resp.X = 20;
+            resp.Y = 1;
             maze[halfRows, 1] = new Path(halfRows, 1);
             maze[halfRows, 2] = new Wall(halfRows, 2);
             maze[halfRows + 1, 0] = new Path(halfRows + 1, 0);
@@ -233,7 +236,7 @@ namespace GameService.Services
             {
                 return false;
             }
-            var path = Paths.First((x) => x.GridPosition.X == i & x.GridPosition.Y == j);
+            var path = Paths.FirstOrDefault((x) => x.Row == i && x.Cell == j);
             if (path != null)
             {
                 return true;

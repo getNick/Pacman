@@ -1,13 +1,15 @@
-﻿using System;
+﻿using GameDataLayer.EF;
+using GameDataLayer.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GameDataLayer
+namespace GameDataLayer.Repositories
 {
-    public class UnitOfWork : IUnitOfWork
+    public class EFUnitOfWork : IUnitOfWork
     {
         private readonly DbContext _dbContext;
         private bool _disposed;
@@ -18,9 +20,9 @@ namespace GameDataLayer
             get { return _playersRepository ?? (_playersRepository = new PlayersRepository(_dbContext)); }
         }
 
-        public UnitOfWork(IDbContextFactory dbContextFactory)
+        public EFUnitOfWork(string connectionString)
         {
-            _dbContext = dbContextFactory.GetDbContext();
+            _dbContext = new PlayersContext(connectionString);
         }
 
 

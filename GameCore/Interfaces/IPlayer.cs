@@ -8,7 +8,9 @@ namespace GameCore.Interfaces
 {
     public interface IPlayer
     {
-        string Name { get; set; }
-        int Score { get; set; }
+        string Name { get;}
+        int Score { get;}
+        void AddToScore(int count);
+        bool ChangeName(string newName);
     }
 }

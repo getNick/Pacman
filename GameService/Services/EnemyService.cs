@@ -10,7 +10,7 @@ namespace GameService.Services
 {
     public class EnemyService
     {
-        List<Enemy> ListEnemies;
+        public List<Enemy> ListEnemies;
         IPacman Pacman;
         IMaze Maze;
         IPursueAlgo PursueAlgo;
@@ -22,7 +22,7 @@ namespace GameService.Services
             ListEnemies = new List<Enemy>();
             for(int i = 0; i < countEmenies; i++)
             {
-                ListEnemies.Add(new Enemy((int)Maze.EnemyRespoint.X, (int)Maze.EnemyRespoint.Y, Maze, Pacman));
+                ListEnemies.Add(new Enemy((int)Maze.EnemyRespoint.X, (int)Maze.EnemyRespoint.Y, Maze, Pacman,PursueAlgo));
             }
         }
     }

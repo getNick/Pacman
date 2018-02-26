@@ -16,7 +16,8 @@ namespace GameCore.Classes
         }
         public void Activate()
         {
-            Player.Score++;
+            Player.AddToScore(1);
+
         }
     }
 }

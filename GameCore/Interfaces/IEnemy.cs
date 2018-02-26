@@ -7,8 +7,9 @@ using System.Windows;
 
 namespace GameCore.Interfaces
 {
-    interface IEnemy:IMoveObject
+    public interface IEnemy : IMoveObject
     {
         IPacman Pacman { get;}
+        IPursueAlgo PursueAlgo {get;}
     }
 }

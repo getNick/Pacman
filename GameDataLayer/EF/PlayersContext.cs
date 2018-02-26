@@ -2,11 +2,15 @@
 using GameCore.Interfaces;
 using System.Data.Entity;
 
-namespace GameDataLayer
+namespace GameDataLayer.EF
 {
     public class PlayersContext : DbContext
     {
         public DbSet<Player> Players { get; set; }
-
+        
+        public PlayersContext(string connectionString)
+            : base(connectionString)
+        {
+        }
     }
 }

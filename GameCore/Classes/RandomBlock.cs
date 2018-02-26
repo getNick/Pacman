@@ -50,27 +50,30 @@ namespace GameCore.Classes
             {
                 TransposeFigure(figure);
             }
-            Height = (int)figure.Max((f) => f.GridPosition.X);
-            Width = (int)figure.Max((f) => f.GridPosition.Y);
+            Height = figure.Max((f) => f.Row);
+            Width = figure.Max((f) => f.Cell);
             Walls = figure;
         }
         private static void TransposeFigure(List<Wall> figure)
         {
+            int temp;
             foreach (var wall in figure)
             {
-                wall.GridPosition = new Vector(wall.GridPosition.Y, wall.GridPosition.X);
+                temp = wall.Row;
+                wall.Row = wall.Cell;
+                wall.Cell = temp;
             }
         }
         private static void Normalize(List<Wall> figure)
         {
-            var offset = -figure.Min((f) => f.GridPosition.Y);
+            var offset = -figure.Min((f) => f.Cell);
             if (offset == 0)
             {
                 return;
             }
             foreach (var wall in figure)
             {
-                wall.GridPosition = new Vector(wall.GridPosition.X, wall.GridPosition.Y + offset);
+                wall.Cell += offset;
             }
         }
 

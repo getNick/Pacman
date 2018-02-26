@@ -10,6 +10,8 @@ using System.Windows;
 using System.Windows.Navigation;
 using WpfApplication.Utils;
 using WpfApplication.Views;
+using GameCore.Classes;
+using GameCore.Interfaces;
 
 namespace WpfApplication
 {
@@ -18,13 +20,13 @@ namespace WpfApplication
     /// </summary>
     public partial class App : Application
     {
-        public static Autofac.IContainer container;
+        public static Autofac.IContainer ViewContainer;
         protected override void OnStartup(StartupEventArgs e)
         {
             var builder = new ContainerBuilder();
             builder.RegisterType<MainWindowViewModel>().AsSelf().SingleInstance();
-            container = builder.Build();
-            var model = container.Resolve<MainWindowViewModel>();
+            ViewContainer = builder.Build();
+            var model = ViewContainer.Resolve<MainWindowViewModel>();
             var view = new StartWindow { DataContext = model };
             view.Show();
         }

@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using GameCore.Classes;
-using GameCore.Interfaces;
 
-namespace GameDataLayer
+namespace GameDataLayer.Repositories
 {
-    public class PlayersRepository : Repository<Player>,IPlayersRepository
+    public class PlayersRepository : Repository<Player>
     {
         public PlayersRepository(DbContext dbContext) : base(dbContext)
         {

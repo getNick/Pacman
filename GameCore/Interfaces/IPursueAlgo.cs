@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GameCore.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,6 @@ namespace GameCore.Interfaces
     public interface IPursueAlgo
     {
         IMaze Maze { get;}
-        Vector NextStep(Vector from, Vector to);
+        Direction NextStepDirection(Vector from, Vector to);
     }
 }

@@ -1,14 +1,51 @@
 ﻿using GameCore.Interfaces;
+using System.ComponentModel;
 using System.Windows;
 
 namespace GameCore.Classes
 {
-    public abstract class GameObject : IGameObject
+    public abstract class GameObject : IGameObject,INotifyPropertyChanged
     {
-        public Vector GridPosition { get; set; }
+        private int _row;
+        public int Row {
+            get
+            {
+                return _row;
+            }
+            set
+            {
+                _row = value;
+                OnPropertyChanged("Row");
+            }
+        }
+        private int _cell;
+        public int Cell
+        {
+            get
+            {
+                return _cell;
+            }
+            set
+            {
+                _cell = value;
+                OnPropertyChanged("Cell");
+            }
+        }
         public GameObject(int row, int cell)
         {
-            GridPosition = new Vector(row, cell);
+            Row = row;
+            Cell = cell;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChangedEventHandler handler = this.PropertyChanged;
+            if (handler != null)
+            {
+                handler.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            }
         }
     }
 }

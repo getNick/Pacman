@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GameDataLayer
+namespace GameDataLayer.Interfaces
 {
     public interface IRepository<T> where T : class
     {
