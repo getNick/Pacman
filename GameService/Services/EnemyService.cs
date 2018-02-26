@@ -20,9 +20,11 @@ namespace GameService.Services
             Pacman = pacman ?? throw new ArgumentNullException("Pacman");
             PursueAlgo = pursueAlgo ?? throw new ArgumentNullException("PursueAlgo");
             ListEnemies = new List<Enemy>();
+            Random random = new Random();
             for(int i = 0; i < countEmenies; i++)
             {
-                ListEnemies.Add(new Enemy((int)Maze.EnemyRespoint.X, (int)Maze.EnemyRespoint.Y, Maze, Pacman,PursueAlgo));
+                int index = random.Next(0, Maze.Paths.Count);
+                ListEnemies.Add(new Enemy(Maze.Paths[index].Row, Maze.Paths[index].Cell, Maze, Pacman,PursueAlgo));
             }
         }
     }

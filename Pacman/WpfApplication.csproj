@@ -106,13 +106,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Utils\CountLifesToCollection.cs" />
     <Compile Include="Utils\GridToPosXConverter.cs" />
     <Compile Include="Utils\GridToPosZConverter.cs" />
     <Compile Include="ViewModel\MainGameViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
+    <Compile Include="ViewModel\SelectPluginViewModel.cs" />
     <Compile Include="ViewModel\StartPageViewModel.cs" />
     <Compile Include="Views\MainGamePage.xaml.cs">
       <DependentUpon>MainGamePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SelectPluginPage.xaml.cs">
+      <DependentUpon>SelectPluginPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\StartPage.xaml.cs">
       <DependentUpon>StartPage.xaml</DependentUpon>
@@ -138,6 +143,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\SelectPluginPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\StartPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -224,6 +233,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Models\Enemy\enemy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\heart.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

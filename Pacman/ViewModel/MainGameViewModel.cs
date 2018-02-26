@@ -18,7 +18,6 @@ namespace WpfApplication.ViewModel
 {
     class MainGameViewModel : ViewModelBase
     {
-
         IContainer ServiceContainer { get; set; }
         private List<Vector> _listBricks;
         public IEnumerable<Vector> ListBricks {
@@ -31,8 +30,6 @@ namespace WpfApplication.ViewModel
                 return _listBricks;
             }
         }
-
-
         public IMaze Maze { get; set; }
         public IPlayer Player { get; set; }
         public IPacman Pacman { get; set; }
@@ -42,17 +39,10 @@ namespace WpfApplication.ViewModel
             ApplicationService appserv = new ApplicationService();
             ServiceContainer = ApplicationService.Container;
             Maze = ServiceContainer.Resolve<IMaze>();
-            //var data = ServiceContainer.Resolve<DataLayerService>();
-            //data.AddRecord(new GameCore.Classes.Player("Oleg"));
-            //foreach(var player in data.GetTop(5))
-            //{
-            //    Console.WriteLine(player.Name + " " + player.Score);
-            //}
             Pacman = ServiceContainer.Resolve<IPacman>();
             Player = ServiceContainer.Resolve<IPlayer>();
             Player.ChangeName(ConfigurationManager.AppSettings["PlayerName"]);
             ListEnemies = ServiceContainer.Resolve<EnemyService>().ListEnemies;
-
 
         }
         public int TimeLeft { get; private set; } = 300;
@@ -193,17 +183,13 @@ namespace WpfApplication.ViewModel
             {
                 IsVisible = true;
             }*/
-
-
-            OnPropertyChanged("HaveGift");
-            OnPropertyChanged("TimeLeft");
-            //OnPropertyChanged("Score");
         }
         #endregion
         
     }
-    class TestObject
+    /*class TestObject
     {
+        public TestObject() { }
         public TestObject(int x,int y,bool visible,string text)
         {
             X = x;
@@ -215,5 +201,5 @@ namespace WpfApplication.ViewModel
         public int Y { get; set; }
         public bool Visible { get; set; } = true;
         public string Text { get; set; } = "lolololo";
-    }
+    }*/
 }

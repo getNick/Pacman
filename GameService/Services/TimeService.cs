@@ -14,15 +14,14 @@ namespace GameService.Services
             worker = new BackgroundWorker();
             worker.DoWork += Worker_DoWork;
             worker.RunWorkerCompleted += Worker_RunWorkerCompleted;
-            worker.RunWorkerAsync(100);
+            worker.RunWorkerAsync();
         }
 
         private void Worker_DoWork(object sender, DoWorkEventArgs e)
         {
             while (true)
             {
-                Thread.Sleep(300);
-                Console.WriteLine("Tic");
+                Thread.Sleep(400);
                 StepEvent?.Invoke();
             }
         }

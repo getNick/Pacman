@@ -93,7 +93,8 @@ namespace WpfApplication.ViewModel
             config.AppSettings.Settings["PlayerName"].Value = PlayerName;
             config.Save(ConfigurationSaveMode.Modified);
             var currentPage = App.ViewContainer.Resolve<MainWindowViewModel>();
-            currentPage.CurrentPage = new MainGamePage();
+            currentPage.CurrentPage = new SelectPluginPage();
+           
         }
         #endregion
     }

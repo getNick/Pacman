@@ -12,14 +12,21 @@ namespace GameService.Services
     public class PacmanService : MoveObject, IPacman
     {
         public int Lifes { get; set; }
+
+        public event PacmenStep PacmenStepEvent;
+
         public PacmanService(IMaze maze): base((int)maze.PacmenPespoint.X, (int)maze.PacmenPespoint.Y,maze)
         {
             Lifes = 3;
         }
+
+        
+
         public override bool Step()
         {
             if (base.Step())
             {
+                PacmenStepEvent?.Invoke();
                 OnPropertyChanged("Row");
                 OnPropertyChanged("Cell");
                 UseGift();

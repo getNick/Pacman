@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:WpfApplication.ViewModel"
+      xmlns:databinding="clr-namespace:WpfApplication.Utils"
        xmlns:h="http://helix-toolkit.org/wpf"
         xmlns:c="clr-namespace:CalcBinding;assembly=CalcBinding"
         mc:Ignorable="d"
@@ -14,6 +15,7 @@
     </Page.DataContext>
     <Page.Resources>
         <BooleanToVisibilityConverter x:Key="ConverterBoolToVis" />
+        <databinding:CountLifesToCollection x:Key="CountLifesToCollection"></databinding:CountLifesToCollection>
     </Page.Resources>
     <Grid Name="GridHandler">
         <Grid.RowDefinitions>
@@ -21,9 +23,10 @@
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Button Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" BorderThickness="0" Foreground="White" FontSize="25" FontFamily="Comic Sanc" Content="New game"
             Command="{Binding ScoreInc}">
@@ -31,11 +34,27 @@
         <TextBlock Grid.Row="0" Grid.Column="1" Visibility="{c:Binding IsVisible, FalseToVisibility=Hidden}" VerticalAlignment="Center" HorizontalAlignment="Center" Name="ScoreText" Foreground="White" FontSize="25"
             Text="{Binding Path=Player.Score, StringFormat='Score: {0}', UpdateSourceTrigger=PropertyChanged}" >
         </TextBlock>
+        <ListBox  Name="Hearts" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left" BorderThickness="0"  Background="Black"  ItemsSource="{Binding Path=Pacman.Lifes,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource CountLifesToCollection}}">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="{x:Type ListBoxItem}">
+                    <Setter Property="IsEnabled" Value="False"/>
+                </Style>
+            </ListBox.ItemContainerStyle>
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Image Height="25" Width="25" Source="pack://application:,,,/Resources/Images/heart.png"></Image>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
 
-
-        <h:HelixViewport3D Name="Viewport" Grid.Row="1" Grid.ColumnSpan="3" Background="White" >
-            <h:HelixViewport3D.DefaultCamera>
-                <PerspectiveCamera Position="5,-5,20" LookDirection="-5,5,-20" NearPlaneDistance="10.0" FarPlaneDistance="500" FieldOfView="60"/>
+        <h:HelixViewport3D Name="Viewport" Grid.Row="1" Grid.ColumnSpan="4" Background="White" IsZoomEnabled="False" IsMoveEnabled="False"  IsRotationEnabled="False" ShowViewCube="False">
+            <h:HelixViewport3D.DefaultCamera >
+                <PerspectiveCamera  Position="17.5,17.5,35" LookDirection="0,0,-35" NearPlaneDistance="10.0" FarPlaneDistance="500" FieldOfView="60"/>
             </h:HelixViewport3D.DefaultCamera>
             <h:SunLight/>
             <h:FileModelVisual3D x:Name="player" Source="D:\gitHub\Pacman\Pacman\Resources\Models\Pacman\pacman.obj" >
@@ -55,7 +74,7 @@
 
 
 
-            <h:GridLinesVisual3D Width="45" Length="45" MinorDistance="1.5" MajorDistance="1.5" Thickness="0.01" Center="22.5 22.5  0"/>
+            <h:GridLinesVisual3D Width="{c:Binding Path=Maze.Height*1.5}" Length="{c:Binding Path=Maze.Width*1.5}" MinorDistance="1.5" MajorDistance="1.5" Thickness="0.01"  Center="18 18  0"/>
         </h:HelixViewport3D>
     </Grid>
     <Page.InputBindings>

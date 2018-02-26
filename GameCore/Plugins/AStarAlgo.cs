@@ -7,30 +7,27 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace GameCore.Classes
+namespace GameCore.Plagins
 {
     public class AStarAlgo : IPursueAlgo
     {
         public IMaze Maze { get;private set; }
-        private Queue<Tail> QueSteps;
+
         private Random rnd = new Random();
         public AStarAlgo(IMaze maze)
         {
             Maze = maze ?? throw new ArgumentNullException("Maze");
-            QueSteps = new Queue<Tail>();
-            Console.WriteLine("ASTAR");
         }
 
         public Direction NextStepDirection(Vector from, Vector to)
         {
-            if (QueSteps.Count == 0)
+            if (from == to)
             {
-                GetNextSteps(50, from, to, QueSteps);
+                return Direction.Left;
             }
-            if (QueSteps.Count == 0)
-            {
-                return Direction.Right;
-            }
+            var QueSteps = new Queue<Tail>();
+            GetNextSteps(1, from, to, QueSteps);
+            
             var temp = QueSteps.Dequeue();
             if (temp.Rows > from.X)
             {
@@ -51,7 +48,6 @@ namespace GameCore.Classes
         }
         private void GetNextSteps(int count, Vector from, Vector to,Queue<Tail> queue)
         {
-            Console.WriteLine("New roaaaaaaaaaaaaaaaaaaaaaaaaaaadddddd");
             List<Tail> Closed = new List<Tail>();
             List<Tail> Open = new List<Tail>();
             List<Tail> All = new List<Tail>();
@@ -143,22 +139,6 @@ namespace GameCore.Classes
             }
             return neighbors;
         }
-        /*private Tail FindNearest(List<Tail> list,Tail end)
-        {
-            int min = Distance(list[0], end);
-            int index = 0;
-            int temp;
-            for (int i = 1; i < list.Count; i++)
-            {
-                temp = Distance(list[i], end);
-                if (temp < min)
-                {
-                    min = temp;
-                    index = i;
-                }
-            }
-            return list[index];
-        }*/
         
        
         private class Tail

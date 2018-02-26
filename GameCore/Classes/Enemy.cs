@@ -19,17 +19,30 @@ namespace GameCore.Classes
         {
             Pacman = pacman ?? throw new ArgumentNullException("Pacman");
             PursueAlgo = pursueAlgo ?? throw new ArgumentNullException("PursueAlgo");
+            Pacman.PacmenStepEvent += new PacmenStep(PacmanSteps);
+        }
+        private bool PacmanSteps()
+        {
+            if ((Row == Pacman.Row) & (Cell == Pacman.Cell))
+            {
+                Pacman.UseAdditionalLife();
+                return true;
+            }
+            return false;
         }
         public override bool Step()
         {
-            Direction=PursueAlgo.NextStepDirection(new Vector(Row,Cell),new Vector(Pacman.Row, Pacman.Cell));
+            Direction =PursueAlgo.NextStepDirection(new Vector(Row,Cell),new Vector(Pacman.Row, Pacman.Cell));
             if (base.Step())
             {
                 OnPropertyChanged("Row");
                 OnPropertyChanged("Cell");
                 return true;
             }
-            Console.WriteLine("Falsessss");
+            if ((Row == Pacman.Row) & (Cell == Pacman.Cell))
+            {
+                Pacman.UseAdditionalLife();
+            }
             return false;
         }
     }

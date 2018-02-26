@@ -1,0 +1,29 @@
+﻿<Page x:Class="WpfApplication.Views.SelectPluginPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:WpfApplication.ViewModel"
+      mc:Ignorable="d" 
+     d:DesignHeight="770" d:DesignWidth="720"
+      Title="SelectPluginPage">
+    <Page.DataContext>
+        <local:SelectPluginViewModel></local:SelectPluginViewModel>
+    </Page.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="2*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition Width="2*"></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize="25"> Выберите сложность</TextBlock>
+        <ListBox Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" BorderThickness="0" FontSize="20" Margin="0,32.2,0,389.6" 
+                 ItemsSource="{Binding Path=ListPluginsName,UpdateSourceTrigger=PropertyChanged}" 
+                 SelectedItem="{Binding Path=SelectedPlugin, Mode=TwoWay}"/>
+        <Button Grid.Row="1" Grid.Column="1" Content="Выбрать" FontSize="20" Command="{Binding SelectPluginCommand}" Margin="0,154.2,0,303.6"></Button>
+    </Grid>
+</Page>
