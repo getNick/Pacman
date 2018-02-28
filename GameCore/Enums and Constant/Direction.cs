@@ -1,5 +1,5 @@
 ﻿
-namespace GameCore.Enums
+namespace GameCore.EnumsAndConstant
 {
     public enum Direction
     {

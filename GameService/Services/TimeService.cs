@@ -17,6 +17,11 @@ namespace GameService.Services
             worker.RunWorkerAsync();
         }
 
+        private void Worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            Console.WriteLine("Worker stop");
+        }
+
         private void Worker_DoWork(object sender, DoWorkEventArgs e)
         {
             while (true)
@@ -26,9 +31,5 @@ namespace GameService.Services
             }
         }
 
-        private void Worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            Console.WriteLine("Worker stop");
-        }
     }
 }

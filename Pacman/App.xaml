@@ -7,5 +7,9 @@
              d1p1:Ignorable="d" 
              xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006">
     <Application.Resources>
+        <Style x:Key="MinecraftText">
+            <Setter Property="TextElement.FontFamily" Value="Resources/#MinecraftFont" />
+            <Setter Property="TextElement.FontSize" Value="20"></Setter>
+        </Style>
     </Application.Resources>
 </Application>

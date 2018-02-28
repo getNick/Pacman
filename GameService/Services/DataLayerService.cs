@@ -15,12 +15,17 @@ namespace GameService.Services
         public IUnitOfWork UnitOfWork { get; set; }
         public DataLayerService()
         {
-            UnitOfWork = new EFUnitOfWork("Reconds");
+            UnitOfWork = new EFUnitOfWork("Records");
         }
-        public void AddRecord(Player player)
+        public void AddRecord(IPlayer player)
         {
-            UnitOfWork.PlayersRepository.Create(player);
-            UnitOfWork.Save();
+            var Player = player as Player;
+            if (Player != null)
+            {
+                UnitOfWork.PlayersRepository.Create(Player);
+                UnitOfWork.Save();
+            }
+            
         }
         public IEnumerable<Player> GetTop(int count)
         {

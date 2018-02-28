@@ -1,24 +1,22 @@
 ﻿using Autofac;
 using GameCore.Classes;
-using GameCore.Enums;
+using GameCore.EnumsAndConstant;
 using GameCore.Interfaces;
 using GameService.Services;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media.Media3D;
 using WpfApplication.Utils;
+using WpfApplication.Views;
 
 namespace WpfApplication.ViewModel
 {
     class MainGameViewModel : ViewModelBase
     {
-        IContainer ServiceContainer { get; set; }
         private List<Vector> _listBricks;
         public IEnumerable<Vector> ListBricks {
             get
@@ -34,17 +32,65 @@ namespace WpfApplication.ViewModel
         public IPlayer Player { get; set; }
         public IPacman Pacman { get; set; }
         public IEnumerable<IEnemy> ListEnemies{get;set;}
+        private bool newLayerLoaded = false;
+        private bool pacmanDead = false;
+        private int _layerNumber = 0;
+        public int LayerNumber {
+            get
+            {
+                return _layerNumber;
+            }
+            set
+            {
+                _layerNumber = value;
+                OnPropertyChanged("LayerNumber");
+            }
+        }
+        public string AssemblyPath
+        {
+            get
+            {
+                string codeBase = Assembly.GetExecutingAssembly().CodeBase;
+                UriBuilder uri = new UriBuilder(codeBase);
+                string path = Uri.UnescapeDataString(uri.Path);
+                return  System.IO.Path.GetDirectoryName(path);
+            }
+        }
+
         public MainGameViewModel()
         {
-            ApplicationService appserv = new ApplicationService();
-            ServiceContainer = ApplicationService.Container;
-            Maze = ServiceContainer.Resolve<IMaze>();
-            Pacman = ServiceContainer.Resolve<IPacman>();
-            Player = ServiceContainer.Resolve<IPlayer>();
+            var layerServ = App.ViewContainer.Resolve<LayerService>();
+            var LayerContainer = layerServ.LoadLayer();
+            Maze = LayerContainer.Resolve<IMaze>();
+            Pacman = LayerContainer.Resolve<IPacman>();
+            Player = LayerContainer.Resolve<IPlayer>();
             Player.ChangeName(ConfigurationManager.AppSettings["PlayerName"]);
-            ListEnemies = ServiceContainer.Resolve<EnemyService>().ListEnemies;
-
+            ListEnemies = LayerContainer.Resolve<EnemyService>().ListEnemies;
+            Pacman.PacmenDead += Pacman_PacmenDead;
+            layerServ.LoadNewLayerEvent += LoadNewLayer;
+            LayerNumber = LayerService.LayerNumber;
         }
+        private void LoadNewLayer(object sender, EventArgs e)
+        {
+            if (newLayerLoaded == false)
+            {
+                var currentPage = App.ViewContainer.Resolve<MainWindowViewModel>();
+                currentPage.CurrentPage = new MainGamePage();
+                newLayerLoaded = true;
+            }
+        }
+
+        private void Pacman_PacmenDead(object sender, EventArgs e)
+        {
+            if (!pacmanDead)
+            {
+                pacmanDead = true;
+                var currentPage = App.ViewContainer.Resolve<MainWindowViewModel>();
+                currentPage.CurrentPage = new RecordsPage();
+                
+            }
+        }
+
         public int TimeLeft { get; private set; } = 300;
 
         #region WellToBreaks
@@ -172,17 +218,8 @@ namespace WpfApplication.ViewModel
         }
         private void ScoreIncCommand(object parameter)
         {
-            Player.AddToScore(10);
-            Console.WriteLine(Pacman.Row+" " +Pacman.Cell);
-            /*TimeLeft--;
-            if (IsVisible == true)
-            {
-                IsVisible = false;
-            }
-            else
-            {
-                IsVisible = true;
-            }*/
+            var currentPage = App.ViewContainer.Resolve<MainWindowViewModel>();
+            currentPage.CurrentPage = new RecordsPage();
         }
         #endregion
         

@@ -54,6 +54,7 @@
     <Compile Include="Services\DataLayerService.cs" />
     <Compile Include="Services\EnemyService.cs" />
     <Compile Include="Services\GiftsService.cs" />
+    <Compile Include="Services\LayerService.cs" />
     <Compile Include="Services\MazeService.cs" />
     <Compile Include="Services\PacmanService.cs" />
     <Compile Include="Services\PluginsService.cs" />

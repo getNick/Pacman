@@ -10,7 +10,7 @@ namespace GameDataLayer.Repositories
         {
         }
         public IQueryable<Player> GetTop(int count) {
-            return _dbSet.OrderBy(x => x.Score).Take(count);
+            return _dbSet.OrderByDescending(x => x.Score).Take(count);
         }
     }
 }

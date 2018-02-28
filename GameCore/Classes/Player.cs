@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace GameCore.Classes
 {
-    public class Player : IPlayer,INotifyPropertyChanged
+    public class Player : IPlayer
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -24,6 +24,7 @@ namespace GameCore.Classes
                 OnPropertyChanged("Score");
             }
         }
+
         public Player() { }
         public Player(string name)
         {
@@ -49,7 +50,11 @@ namespace GameCore.Classes
             }
             return false;
         }
-        
+        public void ResetScore()
+        {
+            Score = 0;
+        }
+
         public virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChangedEventHandler handler = this.PropertyChanged;
@@ -58,5 +63,7 @@ namespace GameCore.Classes
                 handler.Invoke(this, new PropertyChangedEventArgs(propertyName));
             }
         }
+
+       
     }
 }

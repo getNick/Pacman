@@ -1,10 +1,8 @@
-﻿using GameCore.Enums;
-using GameCore.Interfaces;
+﻿using GameCore.Interfaces;
+using NLog;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel;
+using System.Threading;
 using System.Windows;
 
 namespace GameCore.Classes
@@ -12,36 +10,78 @@ namespace GameCore.Classes
     public class Enemy : MoveObject,IEnemy
     {
         public IPacman Pacman { get; private set; }
-
         public IPursueAlgo PursueAlgo { get; private set; }
+        private bool EnemisOnPause = false;
+        private BackgroundWorker worker;
 
         public Enemy(int row, int cell, IMaze maze,IPacman pacman,IPursueAlgo pursueAlgo) : base(row, cell, maze)
         {
             Pacman = pacman ?? throw new ArgumentNullException("Pacman");
             PursueAlgo = pursueAlgo ?? throw new ArgumentNullException("PursueAlgo");
             Pacman.PacmenStepEvent += new PacmenStep(PacmanSteps);
+            Pacman.PacmenCatch += new EventHandler(PacmanCatch);
+            worker = new BackgroundWorker();
+            worker.DoWork += EnemisStoped;
         }
+
+        private void PacmanCatch(object sender, EventArgs e)
+        {
+            if (!worker.IsBusy)
+            {
+                worker.RunWorkerAsync();
+            }
+        }
+
+        private void EnemisStoped(object sender, DoWorkEventArgs e)
+        {
+            EnemisOnPause = true;
+            Thread.Sleep(GameCore.EnumsAndConstant.GameConstants.PacmanCatchPause);
+            EnemisOnPause = false;
+        }
+
         private bool PacmanSteps()
         {
-            if ((Row == Pacman.Row) & (Cell == Pacman.Cell))
+            if (!EnemisOnPause)
             {
-                Pacman.UseAdditionalLife();
-                return true;
+                if ((Row == Pacman.Row) & (Cell == Pacman.Cell))
+                {
+                    Pacman.UseAdditionalLife();
+                    return true;
+                }
             }
             return false;
         }
         public override bool Step()
         {
-            Direction =PursueAlgo.NextStepDirection(new Vector(Row,Cell),new Vector(Pacman.Row, Pacman.Cell));
-            if (base.Step())
+            try
             {
-                OnPropertyChanged("Row");
-                OnPropertyChanged("Cell");
-                return true;
-            }
-            if ((Row == Pacman.Row) & (Cell == Pacman.Cell))
+                if ((Row == Pacman.Row) & (Cell == Pacman.Cell))
+                {
+                    Pacman.UseAdditionalLife();
+                }
+                if (EnemisOnPause)
+                {
+                    return false;
+                }
+                try
+                {
+                    Direction = PursueAlgo.NextStepDirection(new Vector(Row, Cell), new Vector(Pacman.Row, Pacman.Cell));
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("FIIRREEE");
+                }
+
+                if (base.Step())
+                {
+                    OnPropertyChanged("Row");
+                    OnPropertyChanged("Cell");
+                    return true;
+                }
+            }catch(Exception ex)
             {
-                Pacman.UseAdditionalLife();
+                Logger logger = LogManager.GetLogger("fileLogger");
+                logger.Error(ex, "Whoops!");
             }
             return false;
         }

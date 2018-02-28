@@ -18,14 +18,16 @@ namespace GameCore.Classes
             HaveGift = true;
             OnPropertyChanged("HaveGift");
         }
-        public void UseGift()
+        public bool UseGift()
         {
             if (HaveGift)
             {
                 Gift.Activate();
                 HaveGift = false;
                 OnPropertyChanged("HaveGift");
+                return true;
             }
+            return false;
         }
     }
 }

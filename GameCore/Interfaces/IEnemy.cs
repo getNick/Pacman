@@ -11,5 +11,6 @@ namespace GameCore.Interfaces
     {
         IPacman Pacman { get;}
         IPursueAlgo PursueAlgo {get;}
+
     }
 }

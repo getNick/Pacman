@@ -10,6 +10,8 @@ using System.Windows.Controls;
 using WpfApplication.Views;
 using Autofac;
 using GameCore.Interfaces;
+using System.IO;
+using GameService.Services;
 
 namespace WpfApplication.ViewModel
 {
@@ -47,7 +49,7 @@ namespace WpfApplication.ViewModel
         }
         private void SetName(object parameter)
         {
-            if (PlayerName.Length < 5)
+            if (PlayerName.Length < 3)
             {
                 return;
             }
@@ -94,7 +96,7 @@ namespace WpfApplication.ViewModel
             config.Save(ConfigurationSaveMode.Modified);
             var currentPage = App.ViewContainer.Resolve<MainWindowViewModel>();
             currentPage.CurrentPage = new SelectPluginPage();
-           
+            
         }
         #endregion
     }

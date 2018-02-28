@@ -12,11 +12,12 @@ namespace GameService.Services
 {
     public class MazeService : IMaze
     {
+       
         public int Height { get; set; }
         public int Width { get; set; }
         public IEnumerable<Wall> Walls { get; set; }
         public IPlayer Player { get; set; }
-        public ObservableCollection<Path> Paths { get; set; }
+        public IEnumerable<Path> Paths { get; set; }
 
         public Vector EnemyRespoint { get; set; }
         public Vector PacmenPespoint { get; set; } = new Vector(1, 1);
@@ -30,7 +31,7 @@ namespace GameService.Services
             GameObject[,] _halfMaze = new GameObject[tetrisHeight, tetrisWidth];
             bool canInstallYet = true;
             int countFals = 0;
-            while (countFals < 100)
+            while (countFals < GameCore.EnumsAndConstant.GameConstants.MaxCountUnsuccessfulInstall)
             {
                 countFals++;
                 RandomBlock randomBlock = new RandomBlock();
@@ -53,7 +54,6 @@ namespace GameService.Services
                 }
             }
             SetBorder(_halfMaze);
-            EnemyRespoint = CreateEnemyResp(_halfMaze);
             MirrorReflect(_halfMaze, _maze);
             FullMaze(_maze);
             Walls = GetWalls(_maze);
@@ -165,30 +165,6 @@ namespace GameService.Services
                 maze[i, columns - 2] = new Path(i, columns - 2);
             }
 
-        }
-        private Vector CreateEnemyResp(GameObject[,] maze)
-        {
-            Vector resp = new Vector();
-            int rows = maze.GetUpperBound(0) + 1;
-            int columns = maze.Length / rows;
-            int halfRows = rows / 2;
-            maze[halfRows - 3, 0] = new Path(halfRows - 3, 0);
-            maze[halfRows - 2, 0] = new Path(halfRows - 2, 0);
-            maze[halfRows - 1, 0] = new Path(halfRows - 1, 0);
-            maze[halfRows - 1, 1] = new Wall(halfRows - 1, 1);
-            maze[halfRows - 1, 2] = new Wall(halfRows - 1, 2);
-            maze[halfRows, 0] = new Path(halfRows, 0);
-            resp.X = 20;
-            resp.Y = 1;
-            maze[halfRows, 1] = new Path(halfRows, 1);
-            maze[halfRows, 2] = new Wall(halfRows, 2);
-            maze[halfRows + 1, 0] = new Path(halfRows + 1, 0);
-            maze[halfRows + 1, 1] = new Path(halfRows + 1, 1);
-            maze[halfRows + 1, 2] = new Wall(halfRows + 1, 2);
-            maze[halfRows + 2, 0] = new Wall(halfRows + 2, 0);
-            maze[halfRows + 2, 1] = new Wall(halfRows + 2, 1);
-            maze[halfRows + 2, 2] = new Wall(halfRows + 2, 2);
-            return resp;
         }
         public IEnumerable<Wall> GetWalls(GameObject[,] maze)
         {

@@ -25,7 +25,7 @@ namespace WpfApplication.ViewModel
             {
                 ListPluginsName.Add(plugin.Name);
             }
-            SelectedPlugin = ListPluginsName[0];
+            SelectedPlugin = ListPluginsName.First();
         }
         RelayCommand _selectPlugin;
         public ICommand SelectPluginCommand

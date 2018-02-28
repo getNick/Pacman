@@ -1,8 +1,6 @@
-﻿using GameCore.Enums;
+﻿using GameCore.EnumsAndConstant;
 using GameCore.Interfaces;
 using System;
-using System.ComponentModel;
-using System.Windows;
 
 namespace GameCore.Classes
 {

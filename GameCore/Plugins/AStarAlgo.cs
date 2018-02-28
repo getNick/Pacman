@@ -1,10 +1,8 @@
-﻿using GameCore.Enums;
+﻿using GameCore.EnumsAndConstant;
 using GameCore.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace GameCore.Plagins
@@ -12,22 +10,29 @@ namespace GameCore.Plagins
     public class AStarAlgo : IPursueAlgo
     {
         public IMaze Maze { get;private set; }
+        private Queue<Tail> QueSteps;
 
         private Random rnd = new Random();
         public AStarAlgo(IMaze maze)
         {
             Maze = maze ?? throw new ArgumentNullException("Maze");
+            QueSteps=new Queue<Tail>();
         }
 
         public Direction NextStepDirection(Vector from, Vector to)
         {
             if (from == to)
+            {//enemies hint pacmen return random direction
+                return Direction.Left;
+            }
+            if (QueSteps.Count == 0)
+            {
+                GetNextSteps(rnd.Next(15), from, to, QueSteps);
+            }
+            if (QueSteps.Count == 0)
             {
                 return Direction.Left;
             }
-            var QueSteps = new Queue<Tail>();
-            GetNextSteps(1, from, to, QueSteps);
-            
             var temp = QueSteps.Dequeue();
             if (temp.Rows > from.X)
             {
@@ -64,8 +69,16 @@ namespace GameCore.Plagins
             {
                 throw new ArgumentOutOfRangeException();
             }
-            Tail end = All.First(x => x.Rows == to.X & x.Cell == to.Y);
-            Tail start = All.First(x => x.Rows == from.X & x.Cell == from.Y);
+            Tail end = All.FirstOrDefault(x => x.Rows == to.X & x.Cell == to.Y);
+            if (end == null)
+            {
+                throw new Exception("Bad pacman pos");
+            }
+            Tail start = All.FirstOrDefault(x => x.Rows == from.X & x.Cell == from.Y);
+            if (start == null)
+            {
+                throw new Exception("Bad enemies pos");
+            }
             start.SetParam(null, 0,end);
             Open.Add(start);
             Tail current;

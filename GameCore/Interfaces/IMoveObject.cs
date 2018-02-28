@@ -1,4 +1,4 @@
-﻿using GameCore.Enums;
+﻿using GameCore.EnumsAndConstant;
 using System.ComponentModel;
 
 namespace GameCore.Interfaces
