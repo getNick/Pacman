@@ -34,8 +34,20 @@ namespace WpfApplication.Views
                 FileModelVisual3D fmv3D = new FileModelVisual3D();
                 fmv3D.Source = context.AssemblyPath + @"\Resources\Models\Pacman\pacman.obj";
                 var transformGroup = new Transform3DGroup();
+
+                Binding bindingAngleRot = new Binding();
+                var axisAngleRotation3D = new AxisAngleRotation3D();
+                axisAngleRotation3D.Axis = new Vector3D(0.0, 1.0, 0.0);
+                bindingAngleRot.Path = new PropertyPath("Direction");
+                bindingAngleRot.Source = context.Pacman;
+                bindingAngleRot.Converter = new DirectionToRotationConverter();
+                bindingAngleRot.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+                BindingOperations.SetBinding(axisAngleRotation3D, AxisAngleRotation3D.AngleProperty, bindingAngleRot);
+                transformGroup.Children.Add(new RotateTransform3D(axisAngleRotation3D));
+
                 var scale = 0.1;
                 var translateTransform = new TranslateTransform3D();
+
                 Binding bindingX = new Binding();
                 bindingX.Path = new PropertyPath("Row");
                 bindingX.Source = context.Pacman;
@@ -67,6 +79,15 @@ namespace WpfApplication.Views
                 FileModelVisual3D fmv3D = new FileModelVisual3D();
                 fmv3D.Source = context.AssemblyPath + @"\Resources\Models\Pacman\pacman2.obj";
                 var transformGroup = new Transform3DGroup();
+                Binding bindingAngleRot = new Binding();
+                var axisAngleRotation3D = new AxisAngleRotation3D();
+                axisAngleRotation3D.Axis = new Vector3D(0.0, 1.0, 0.0);
+                bindingAngleRot.Path = new PropertyPath("Direction");
+                bindingAngleRot.Source = context.Pacman;
+                bindingAngleRot.Converter = new DirectionToRotationConverter();
+                bindingAngleRot.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+                BindingOperations.SetBinding(axisAngleRotation3D, AxisAngleRotation3D.AngleProperty, bindingAngleRot);
+                transformGroup.Children.Add(new RotateTransform3D(axisAngleRotation3D));
                 var scale = 0.1;
                 var translateTransform = new TranslateTransform3D();
                 Binding bindingX = new Binding();
@@ -115,6 +136,15 @@ namespace WpfApplication.Views
                 FileModelVisual3D fmv3D = new FileModelVisual3D();
                 fmv3D.Source = context.AssemblyPath + @"\Resources\Models\Enemy\enemy.obj";
                 var transformGroup = new Transform3DGroup();
+                Binding bindingAngleRot = new Binding();
+                var axisAngleRotation3D = new AxisAngleRotation3D();
+                axisAngleRotation3D.Axis = new Vector3D(0.0, 1.0, 0.0);
+                bindingAngleRot.Path = new PropertyPath("Direction");
+                bindingAngleRot.Source = enemy;
+                bindingAngleRot.Converter = new DirectionToRotationConverter();
+                bindingAngleRot.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+                BindingOperations.SetBinding(axisAngleRotation3D, AxisAngleRotation3D.AngleProperty, bindingAngleRot);
+                transformGroup.Children.Add(new RotateTransform3D(axisAngleRotation3D));
                 var scale = 0.1;
                 var translateTransform = new TranslateTransform3D();
                 Binding bindingX = new Binding();
@@ -160,5 +190,6 @@ namespace WpfApplication.Views
             Viewport.Focus();
 
         }
+
     }
 }

@@ -23,9 +23,8 @@ namespace WpfApplication.ViewModel
         public string PlayerName { get; set; }
         private Configuration config;
         public StartPageViewModel()
-        { 
-            config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            PlayerName = config.AppSettings.Settings["PlayerName"].Value;
+        {
+            PlayerName = Properties.Settings.Default.UserName;
             if (PlayerName.Length > 1)
             {
                 NewPlayer = false;
@@ -92,8 +91,12 @@ namespace WpfApplication.ViewModel
         }
         private void StartGame(object parameter)
         {
-            config.AppSettings.Settings["PlayerName"].Value = PlayerName;
-            config.Save(ConfigurationSaveMode.Modified);
+            if (PlayerName != "")
+            {
+                Properties.Settings.Default.UserName = PlayerName;
+                Properties.Settings.Default.Save();
+            }
+           
             var currentPage = App.ViewContainer.Resolve<MainWindowViewModel>();
             currentPage.CurrentPage = new SelectPluginPage();
             

@@ -7,7 +7,19 @@ namespace GameCore.Classes
     public class MoveObject:GameObject,IMoveObject
     {
         public IMaze Maze { get;}
-        public Direction Direction { get; set; }
+        private Direction _direction;
+        public Direction Direction
+        {
+            get
+            {
+                return _direction;
+            }
+            set
+            {
+                _direction = value;
+                OnPropertyChanged("Direction");
+            }
+        }
 
         public MoveObject(int Row,int Cell, IMaze maze) :base(Row,Cell)
         {

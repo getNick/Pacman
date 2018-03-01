@@ -108,11 +108,12 @@ namespace GameService.Services
 
             var DataLayer = ApplicationService.Container.Resolve<DataLayerService>();
             DataLayer.AddRecord(Player);
-            int minRecord = ListRecords.Min(x => x.Score);
-            if (minRecord < Player.Score)
+            //int minRecord = ListRecords.Min(x => x.Score);
+            //if (minRecord < Player.Score)
             {
                 ListRecords.Add(Player);
-                ListRecords.Remove(ListRecords.First(x => x.Score == minRecord));
+                //ListRecords.Remove(ListRecords.First(x => x.Score == minRecord));
+                ListRecords = ListRecords.OrderByDescending(x => x.Score).ToList();
             }
             LoadNewGame = true;
         }

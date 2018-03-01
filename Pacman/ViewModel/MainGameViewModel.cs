@@ -64,7 +64,7 @@ namespace WpfApplication.ViewModel
             Maze = LayerContainer.Resolve<IMaze>();
             Pacman = LayerContainer.Resolve<IPacman>();
             Player = LayerContainer.Resolve<IPlayer>();
-            Player.ChangeName(ConfigurationManager.AppSettings["PlayerName"]);
+            Player.ChangeName(Properties.Settings.Default.UserName);
             ListEnemies = LayerContainer.Resolve<EnemyService>().ListEnemies;
             Pacman.PacmenDead += Pacman_PacmenDead;
             layerServ.LoadNewLayerEvent += LoadNewLayer;

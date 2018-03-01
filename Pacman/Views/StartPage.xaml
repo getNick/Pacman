@@ -13,12 +13,11 @@
     </Page.DataContext>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="186*" />
-            <RowDefinition Height="186*" />
-            <RowDefinition Height="50*" />
-            <RowDefinition Height="50*" />
-            <RowDefinition Height="50*" />
-            <RowDefinition Height="319*" />
+            <RowDefinition Height="170*" />
+            <RowDefinition Height="170*" />
+            <RowDefinition Height="95*" />
+            <RowDefinition Height="102*" />
+            <RowDefinition Height="210*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
@@ -26,46 +25,33 @@
             <ColumnDefinition />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center" Name="HelloText" Foreground="Black" FontSize="25"
-            Text="{Binding Path=PlayerName, StringFormat='Привет, {0}', UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBlock Grid.Row="1" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center" Name="HelloText" Foreground="Black" FontSize="25"
+            Text="{Binding Path=PlayerName, StringFormat='Привет, {0}', UpdateSourceTrigger=PropertyChanged}" TextAlignment="Center" Height="70" Margin="0,68.6,0,31.8" Width="360" Grid.Column="1"/>
 
-        <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="1"  FontSize="20" BorderThickness="1" HorizontalAlignment="Stretch" 
-                 x:Name="Field" Text="{Binding Path=PlayerName,Mode=OneWayToSource}"
-                   Style="{StaticResource {x:Static ToolBar.TextBoxStyleKey}}"
-                  Visibility="{c:Binding NewPlayer, FalseToVisibility=Hidden}" />
-        <TextBlock IsHitTestVisible="False" Text="Введите имя" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="1"  FontSize="20"  Foreground="DarkGray" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <TextBlock.Style>
-                <Style TargetType="{x:Type TextBlock}">
-                    <Setter Property="Visibility" Value="Collapsed"/>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding Text, ElementName=Field}" Value="">
-                            <Setter Property="Visibility" Value="Visible"/>
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding NewPlayer}" Value="false">
-                            <Setter Property="Visibility" Value="Collapsed"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </TextBlock.Style>
-        </TextBlock>
-
-        <Button Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="1"  FontSize="20" Foreground="Black" Background="White" BorderThickness="0"  
-            Visibility="{c:Binding NewPlayer, FalseToVisibility=Hidden, UpdateSourceTrigger=PropertyChanged}"
-            Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
-             Command="{Binding SetNameCommand}">
-            Запомнить
-        </Button>
-        <Button Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"  FontSize="20" Foreground="Black" Background="White" BorderThickness="0"  
+        <Button Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"  FontSize="20"
                Visibility="{c:Binding !NewPlayer, FalseToVisibility=Hidden, UpdateSourceTrigger=PropertyChanged}"
                 Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
-                Command="{Binding ResetNameCommand}">
+                Command="{Binding ResetNameCommand}" Margin="66,21.2,66,9">
             Это не я
         </Button>
-        <Button Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2"  FontSize="20" Foreground="Black" Background="White" BorderThickness="0"  
+        <Button Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2"  FontSize="20"   
                Visibility="{c:Binding !NewPlayer, FalseToVisibility=Hidden, UpdateSourceTrigger=PropertyChanged}"
                 Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
-                Command="{Binding StartGameCommand}">
+                Command="{Binding StartGameCommand}" Margin="66,19,66,19.6">
             Начать игру
         </Button>
+
+        <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="1"  FontSize="20"  
+                 x:Name="Field" Text="{Binding Path=PlayerName,Mode=OneWayToSource}"
+                 Visibility="{c:Binding NewPlayer, FalseToVisibility=Hidden}"
+                 Margin="0,174.8,0,19" Grid.RowSpan="2"></TextBox>
+
+        <Button Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="1"  FontSize="20"
+            Visibility="{c:Binding NewPlayer, FalseToVisibility=Hidden, UpdateSourceTrigger=PropertyChanged}"
+                Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
+             Command="{Binding SetNameCommand}" Margin="0,21.6,0,10" >
+            Запомнить
+        </Button>
+
     </Grid>
 </Page>

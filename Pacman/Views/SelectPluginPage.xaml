@@ -21,9 +21,10 @@
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <TextBlock Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize="25"> Выберите сложность</TextBlock>
-        <ListBox Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" BorderThickness="0" FontSize="20" Margin="0,32.2,0,389.6" 
+        <ListBox Grid.Row="1" Grid.Column="1" Height="200"  Margin="0,32.2,0,343.6" FontSize="20"
                  ItemsSource="{Binding Path=ListPluginsName,UpdateSourceTrigger=PropertyChanged}" 
                  SelectedItem="{Binding Path=SelectedPlugin, Mode=TwoWay}"/>
-        <Button Grid.Row="1" Grid.Column="1" Content="Выбрать" FontSize="20" Command="{Binding SelectPluginCommand}" Margin="0,154.2,0,303.6"></Button>
+        <Button Grid.Row="1" Grid.Column="1" Content="Выбрать" FontSize="20"  Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
+                Command="{Binding SelectPluginCommand}" Margin="0,237.2,0,195.6" Height="Auto"></Button>
     </Grid>
 </Page>
