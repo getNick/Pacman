@@ -38,9 +38,9 @@ namespace GameService.Services
             Vector pos = new Vector();
             while (!finded)
             {
-                index = random.Next(0, maze.Paths.Count());
+                index = random.Next(0, maze.Paths.Count());//random path index
                 var ramdomPos = maze.Paths.ElementAt(index);
-                if ((Math.Abs(pacman.Row - ramdomPos.Row) + Math.Abs(pacman.Cell - ramdomPos.Cell)) > maze.Height / 2)
+                if ((Math.Abs(pacman.Row - ramdomPos.Row) + Math.Abs(pacman.Cell - ramdomPos.Cell)) > maze.Height / 2)//but not near the pacman
                 {
                     finded = true;
                     pos.X = ramdomPos.Row;

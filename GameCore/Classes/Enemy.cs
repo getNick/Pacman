@@ -53,38 +53,21 @@ namespace GameCore.Classes
         }
         public override bool Step()
         {
-            try
-            {
-                if (EnemisOnPause)
-                {
-                    return false;
-                }
-                if ((Row == Pacman.Row) & (Cell == Pacman.Cell))
-                {
-                    Pacman.UseAdditionalLife();
-                }
-               
-                try
-                {
-                    Direction = PursueAlgo.NextStepDirection(new Vector(Row, Cell), new Vector(Pacman.Row, Pacman.Cell));
-                }
-                catch (Exception e)
-                {
-                    Logger logger = LogManager.GetLogger("fileLogger");
-                    logger.Error(e, "FIIRREEE!");
-                    Console.WriteLine("FIIRREEE");
-                }
 
-                if (base.Step())
-                {
-                    OnPropertyChanged("Row");
-                    OnPropertyChanged("Cell");
-                    return true;
-                }
-            }catch(Exception ex)
+            if (EnemisOnPause)
             {
-                Logger logger = LogManager.GetLogger("fileLogger");
-                logger.Error(ex, "Whoops!");
+                return false;
+            }
+            if ((Row == Pacman.Row) & (Cell == Pacman.Cell))
+            {
+                Pacman.UseAdditionalLife();
+            }
+            Direction = PursueAlgo.NextStepDirection(new Vector(Row, Cell), new Vector(Pacman.Row, Pacman.Cell));
+            if (base.Step())
+            {
+                OnPropertyChanged("Row");
+                OnPropertyChanged("Cell");
+                return true;
             }
             return false;
         }

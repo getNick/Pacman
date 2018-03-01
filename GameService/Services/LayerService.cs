@@ -40,7 +40,10 @@ namespace GameService.Services
             Player = ApplicationService.Container.Resolve<IPlayer>();
             Task t = GetRecordsAsync();
 
-        }
+        }/// <summary>
+        /// Async reques to db and set in ListRecords collection
+        /// </summary>
+        /// <returns></returns>
         async Task GetRecordsAsync()
         {
              await Task.Run(() =>
@@ -49,7 +52,10 @@ namespace GameService.Services
                 ListRecords = dataLayer.GetTop(GameCore.EnumsAndConstant.GameConstants.CountRowsInRecords).ToList();
             });
 
-        }
+        }/// <summary>
+        /// Generate new layer
+        /// </summary>
+        /// <returns>Autofac.Container</returns>
         public Autofac.IContainer LoadLayer()
         {
             if (LoadNewGame)
@@ -90,25 +96,33 @@ namespace GameService.Services
 
             Container = builder.Build();
 
-           
+            //Save layer target
             var gifts = Container.Resolve<GiftsService>();
             GiftsToNextLayer+= gifts.GiftsCount;
+            //add event Score update
             Player.PropertyChanged += Player_PropertyChanged;
+            //stop working backgraund worker on load next layer
             var timeServ = Container.Resolve<TimeService>();
             LoadNewLayerEvent += timeServ.StopWorking;
+            //add handlers on PacmanDead event 
             var Pacman = Container.Resolve<IPacman>();
             Pacman.PacmenDead += PacmanDead;
             Pacman.PacmenDead+= timeServ.StopWorking;
             
             return Container;
         }
-
+        /// <summary>
+        /// PacmanDead event handler
+        /// Save result to db,update ListRecords if needed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void PacmanDead(object sender, EventArgs e)
         {
 
             var DataLayer = ApplicationService.Container.Resolve<DataLayerService>();
             DataLayer.AddRecord(Player);
-            if (ListRecords.Count == GameCore.EnumsAndConstant.GameConstants.CountRowsInRecords)
+            if (ListRecords.Count >= GameCore.EnumsAndConstant.GameConstants.CountRowsInRecords)
             {
                 int minRecord = ListRecords.Min(x => x.Score);
                 if (minRecord < Player.Score)
@@ -125,7 +139,11 @@ namespace GameService.Services
             }
             LoadNewGame = true;
         }
-
+        /// <summary>
+        /// Check end layer
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Player_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "Score")

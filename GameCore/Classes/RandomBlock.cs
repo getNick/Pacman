@@ -16,7 +16,7 @@ namespace GameCore.Classes
         public RandomBlock()
         {
             List<Wall> figure = new List<Wall>();
-            int lenght = rnd.Next(3, 5);
+            int lenght = rnd.Next(3, 5);//random block lenghts
             for (int i = 0; i < lenght; i++)
             {
                 figure.Add(new Wall(i, 0));
@@ -27,7 +27,7 @@ namespace GameCore.Classes
             bool positive = false;
             for (int i = 0; i < countPoints; i++)
             {
-                tempLenght = rnd.Next(4);
+                tempLenght = rnd.Next(4);//random branch lenght
                 if (rnd.Next(2) == 1)
                 {
                     positive = true;

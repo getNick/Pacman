@@ -46,8 +46,8 @@ namespace GameService.Services
                             {
                                 countFals--;
                                 SetPath(_halfMaze);
-                                i = tetrisHeight;
-                                break;
+                                i = tetrisHeight;//return from double cycle
+                                break;//return from double cycle
                             }
                         }
                     }
@@ -60,6 +60,10 @@ namespace GameService.Services
             Paths = GetPaths(_maze);
         }
         #region MazeGeneration
+        /// <summary>
+        /// Full all empty maze tails
+        /// </summary>
+        /// <param name="maze"></param>
         private void FullMaze(GameObject[,] maze)
         {
             int rows = maze.GetUpperBound(0) + 1;
@@ -74,7 +78,11 @@ namespace GameService.Services
                     }
                 }
             }
-        }
+        }/// <summary>
+         /// Symmetrical reflection of the labyrinth
+         /// </summary>
+         /// <param name="halfMaze"></param>
+         /// <param name="maze"></param>
         private void MirrorReflect(GameObject[,] halfMaze, GameObject[,] maze)
         {
             int rows = halfMaze.GetUpperBound(0) + 1;
@@ -92,7 +100,10 @@ namespace GameService.Services
                     }
                 }
             }
-        }
+        }/// <summary>
+        /// set Path around block
+        /// </summary>
+        /// <param name="maze"></param>
         private void SetPath(GameObject[,] maze)
         {
             int rows = maze.GetUpperBound(0) + 1;
@@ -123,7 +134,14 @@ namespace GameService.Services
                     }
                 }
             }
-        }
+        }/// <summary>
+        /// Try set block to Maze
+        /// </summary>
+        /// <param name="maze"></param>
+        /// <param name="i"></param>
+        /// <param name="j"></param>
+        /// <param name="randomBlock"></param>
+        /// <returns>false if non succesfull</returns>
         private bool TrySetBlock(GameObject[,] maze, int i, int j, RandomBlock randomBlock)
         {
             foreach (var wall in randomBlock.Walls)
@@ -143,7 +161,10 @@ namespace GameService.Services
                 wall.Cell += j;
             }
             return true;
-        }
+        }/// <summary>
+        /// set maze border
+        /// </summary>
+        /// <param name="maze"></param>
         private void SetBorder(GameObject[,] maze)
         {
             int rows = maze.GetUpperBound(0) + 1;
@@ -165,7 +186,11 @@ namespace GameService.Services
                 maze[i, columns - 2] = new Path(i, columns - 2);
             }
 
-        }
+        }/// <summary>
+        /// Return all walls on maze
+        /// </summary>
+        /// <param name="maze"></param>
+        /// <returns></returns>
         public IEnumerable<Wall> GetWalls(GameObject[,] maze)
         {
             List<Wall> listWall = new List<Wall>();
@@ -183,10 +208,14 @@ namespace GameService.Services
                 }
             }
             return listWall;
-        }
-        public ObservableCollection<Path> GetPaths(GameObject[,] maze)
+        }/// <summary>
+        /// Return All Paths on maze
+        /// </summary>
+        /// <param name="maze"></param>
+        /// <returns></returns>
+        public IEnumerable<Path> GetPaths(GameObject[,] maze)
         {
-            ObservableCollection<Path> listPath = new ObservableCollection<Path>();
+            List<Path> listPath = new List<Path>();
             int rows = maze.GetUpperBound(0) + 1;
             int columns = maze.Length / rows;
             for (int i = 0; i < rows; i++)
@@ -204,7 +233,12 @@ namespace GameService.Services
         }
         #endregion
 
-
+        /// <summary>
+        /// Can step at this position
+        /// </summary>
+        /// <param name="i"></param>
+        /// <param name="j"></param>
+        /// <returns>false if non succesfull</returns>
         public bool StepTo(int i, int j)
         {
 

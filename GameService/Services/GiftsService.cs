@@ -17,6 +17,9 @@ namespace GameService.Services
             Player = player ?? throw new ArgumentNullException("Player");
             SetGifts();
         }
+        /// <summary>
+        /// Set gifts to all available place
+        /// </summary>
         public void SetGifts()
         {
             List<Path> Closed = new List<Path>();
