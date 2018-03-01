@@ -33,7 +33,7 @@ namespace WpfApplication.ViewModel
         public IPacman Pacman { get; set; }
         public IEnumerable<IEnemy> ListEnemies{get;set;}
         private bool newLayerLoaded = false;
-        private bool pacmanDead = false;
+        public bool ViewResult { get; set; }
         private int _layerNumber = 0;
         public int LayerNumber {
             get
@@ -68,7 +68,7 @@ namespace WpfApplication.ViewModel
             ListEnemies = LayerContainer.Resolve<EnemyService>().ListEnemies;
             Pacman.PacmenDead += Pacman_PacmenDead;
             layerServ.LoadNewLayerEvent += LoadNewLayer;
-            LayerNumber = LayerService.LayerNumber;
+            LayerNumber = layerServ.LayerNumber;
         }
         private void LoadNewLayer(object sender, EventArgs e)
         {
@@ -82,13 +82,8 @@ namespace WpfApplication.ViewModel
 
         private void Pacman_PacmenDead(object sender, EventArgs e)
         {
-            if (!pacmanDead)
-            {
-                pacmanDead = true;
-                var currentPage = App.ViewContainer.Resolve<MainWindowViewModel>();
-                currentPage.CurrentPage = new RecordsPage();
-                
-            }
+            ViewResult = true;
+            OnPropertyChanged("ViewResult");
         }
 
         public int TimeLeft { get; private set; } = 300;
@@ -219,7 +214,7 @@ namespace WpfApplication.ViewModel
         private void ScoreIncCommand(object parameter)
         {
             var currentPage = App.ViewContainer.Resolve<MainWindowViewModel>();
-            currentPage.CurrentPage = new RecordsPage();
+            currentPage.CurrentPage = new MainGamePage();
         }
         #endregion
         

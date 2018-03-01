@@ -24,7 +24,7 @@ namespace GameService.Services
                 OnPropertyChanged("Lifes");
             }
         }
-        private bool Invulnerable = false;
+        private bool _invulnerable = false;
         private bool _eating = false;
         public bool Eating {
             get
@@ -62,10 +62,10 @@ namespace GameService.Services
                 PacmenStepEvent?.Invoke();
                 OnPropertyChanged("Row");
                 OnPropertyChanged("Cell");
-                if (Invulnerable == false)
+                if (_invulnerable == false)
                 {
                     UseGift();
-                }   
+                }
                 return true;
             }
             return false;
@@ -79,15 +79,13 @@ namespace GameService.Services
                 {
                     EatingWorker.RunWorkerAsync();
                 }
-                
             }
         }
         public void UseAdditionalLife()
         {
             if (Lifes == 0)
             {
-                PacmenDead?.Invoke(this,new EventArgs());
-                
+                PacmenDead?.Invoke(this, new EventArgs());
             }
             else
             {
@@ -97,8 +95,6 @@ namespace GameService.Services
                 {
                     InvulnerableWorker.RunWorkerAsync();
                 }
-                
-                
             }
         }
 
@@ -110,9 +106,9 @@ namespace GameService.Services
         }
         public void InvulnerableWorkerMethod(object sender, DoWorkEventArgs e)
         {
-            Invulnerable = true;
+            _invulnerable = true;
             Thread.Sleep(GameCore.EnumsAndConstant.GameConstants.PacmanCatchPause);
-            Invulnerable = false;
+            _invulnerable = false;
         }
 
     }

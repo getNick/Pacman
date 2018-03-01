@@ -18,10 +18,5 @@ namespace CustomGamePlugin.PursueAlgo
         {
             return (Direction)Random.Next(5);
         }
-
-        Direction IPursueAlgo.NextStepDirection(Vector from, Vector to)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

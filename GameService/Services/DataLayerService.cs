@@ -27,7 +27,7 @@ namespace GameService.Services
             }
             
         }
-        public IEnumerable<Player> GetTop(int count)
+        public IEnumerable<IPlayer> GetTop(int count)
         {
             var list = UnitOfWork.PlayersRepository.GetTop(count).ToList();
             return list;

@@ -15,33 +15,15 @@ namespace WpfApplication.ViewModel
 {
     class RecordsViewModel:ViewModelBase
     {
-        IContainer ServiceContainer;
-        DataLayerService DataLayer { get; set; }
-        public int Score { get; set; } = 0;
+        public LayerService LayerService { get;private set; }
         public IPlayer Player { get; set; }
-        public List<Record> ListRecords { get; set; }
         private const int countRowsInResult = 5;
         public RecordsViewModel()
         {
-            ServiceContainer = ApplicationService.Container;
-            DataLayer=ServiceContainer.Resolve<DataLayerService>();
-            Player = ServiceContainer.Resolve<IPlayer>();
-            Score = Player.Score;
-            DataLayer.AddRecord(Player);
-            var listPlayer = DataLayer.GetTop(countRowsInResult);
-            ListRecords = new List<Record>();
-            for(int i = 0; i < listPlayer.Count(); i++)
-            {
-                ListRecords.Add(new Record(i, listPlayer.ElementAt(i).Name, listPlayer.ElementAt(i).Score));
-            }
-            ResetPlayersProgress();
+            LayerService=App.ViewContainer.Resolve<LayerService>();
+            Player = LayerService.Container.Resolve<IPlayer>();
         }
-        void ResetPlayersProgress()
-        {
-            var player = LayerService.Container.Resolve<IPlayer>();
-            player.ResetScore();
-            LayerService.NewGame();
-        }
+
         RelayCommand _tryAgain;
         public ICommand TryAganCommand
         {
@@ -64,7 +46,6 @@ namespace WpfApplication.ViewModel
         {
             get
             {
-
                 if (_changeDiffucult == null)
                     _changeDiffucult = new RelayCommand(ChangeDifficult);
                 return _changeDiffucult;

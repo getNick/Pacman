@@ -7,9 +7,6 @@
         xmlns:c="clr-namespace:CalcBinding;assembly=CalcBinding"
         mc:Ignorable="d"
         Title="StartWindow" Height="770" Width="720">
-   
+
     <Frame Content="{Binding CurrentPage,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" NavigationUIVisibility="Hidden"/>
-    <Window.InputBindings>
-        <KeyBinding Command="{Binding PacmanGoRight}" Key="D"/>
-    </Window.InputBindings>
 </Window>

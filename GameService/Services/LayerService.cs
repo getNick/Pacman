@@ -3,31 +3,62 @@ using GameCore.Classes;
 using GameCore.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace GameService.Services
 {
-    public class LayerService
+    public class LayerService: INotifyPropertyChanged
     {
-        public static IContainer Container { get; private set; }
-        public static int LayerNumber { get;private set; } = 0;
-        private static int GiftsToNextLayer;
+        public static Autofac.IContainer Container { get; private set; }
+        public  int LayerNumber { get;private set; }
+        private  int GiftsToNextLayer;
         private IPlayer Player;
         private ApplicationService applicationService;
         public EventHandler LoadNewLayerEvent;
+        public bool LoadNewGame = true;
+        List<IPlayer> _listRecords;
+        public List<IPlayer> ListRecords
+        {
+            get
+            {
+                return _listRecords;
+            }
+            private set
+            {
+                _listRecords = value;
+                OnPropertyChanged("ListRecords");
+            }
+        }
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public LayerService(){
             applicationService = new ApplicationService();
-            Player = ApplicationService.Container.Resolve<IPlayer>();  
+            Player = ApplicationService.Container.Resolve<IPlayer>();
+            Task t = GetRecordsAsync();
 
         }
-        public static void  NewGame()
+        async Task GetRecordsAsync()
         {
-            LayerNumber = 0;
+             await Task.Run(() =>
+            {
+                var dataLayer = ApplicationService.Container.Resolve<DataLayerService>();
+                ListRecords = dataLayer.GetTop(GameCore.EnumsAndConstant.GameConstants.CountRowsInRecords).ToList();
+            });
+
         }
-        public IContainer LoadLayer()
+        public Autofac.IContainer LoadLayer()
         {
+            if (LoadNewGame)
+            {
+                Player.ResetScore();
+                LayerNumber = 0;
+                GiftsToNextLayer = 0;
+                LoadNewGame = false;
+            }
             LayerNumber++;
             var builder = new ContainerBuilder();
 
@@ -59,11 +90,31 @@ namespace GameService.Services
 
             Container = builder.Build();
 
+           
             var gifts = Container.Resolve<GiftsService>();
             GiftsToNextLayer+= gifts.GiftsCount;
             Player.PropertyChanged += Player_PropertyChanged;
+            var timeServ = Container.Resolve<TimeService>();
+            LoadNewLayerEvent += timeServ.StopWorking;
+            var Pacman = Container.Resolve<IPacman>();
+            Pacman.PacmenDead += PacmanDead;
+            Pacman.PacmenDead+= timeServ.StopWorking;
             
             return Container;
+        }
+
+        private void PacmanDead(object sender, EventArgs e)
+        {
+
+            var DataLayer = ApplicationService.Container.Resolve<DataLayerService>();
+            DataLayer.AddRecord(Player);
+            int minRecord = ListRecords.Min(x => x.Score);
+            if (minRecord < Player.Score)
+            {
+                ListRecords.Add(Player);
+                ListRecords.Remove(ListRecords.First(x => x.Score == minRecord));
+            }
+            LoadNewGame = true;
         }
 
         private void Player_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -74,6 +125,14 @@ namespace GameService.Services
                 {
                     LoadNewLayerEvent?.Invoke(this, new EventArgs());
                 }
+            }
+        }
+        public virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChangedEventHandler handler = this.PropertyChanged;
+            if (handler != null)
+            {
+                handler.Invoke(this, new PropertyChangedEventArgs(propertyName));
             }
         }
     }

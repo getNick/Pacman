@@ -123,8 +123,8 @@
     <Compile Include="Views\MainGamePage.xaml.cs">
       <DependentUpon>MainGamePage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\RecordsPage.xaml.cs">
-      <DependentUpon>RecordsPage.xaml</DependentUpon>
+    <Compile Include="Views\RecordsMenu.xaml.cs">
+      <DependentUpon>RecordsMenu.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SelectPluginPage.xaml.cs">
       <DependentUpon>SelectPluginPage.xaml</DependentUpon>
@@ -145,7 +145,7 @@
     </Compile>
     <Compile Include="Utils\RelayCommand.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
-    <Page Include="Views\RecordsPage.xaml">
+    <Page Include="Views\RecordsMenu.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

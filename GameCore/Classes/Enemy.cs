@@ -55,20 +55,23 @@ namespace GameCore.Classes
         {
             try
             {
-                if ((Row == Pacman.Row) & (Cell == Pacman.Cell))
-                {
-                    Pacman.UseAdditionalLife();
-                }
                 if (EnemisOnPause)
                 {
                     return false;
                 }
+                if ((Row == Pacman.Row) & (Cell == Pacman.Cell))
+                {
+                    Pacman.UseAdditionalLife();
+                }
+               
                 try
                 {
                     Direction = PursueAlgo.NextStepDirection(new Vector(Row, Cell), new Vector(Pacman.Row, Pacman.Cell));
                 }
                 catch (Exception e)
                 {
+                    Logger logger = LogManager.GetLogger("fileLogger");
+                    logger.Error(e, "FIIRREEE!");
                     Console.WriteLine("FIIRREEE");
                 }
 

@@ -16,12 +16,11 @@ using System.Windows.Shapes;
 namespace WpfApplication.Views
 {
     /// <summary>
-    /// Interaction logic for RecordsPage.xaml
+    /// Interaction logic for RecordsMenu.xaml
     /// </summary>
-    public partial class RecordsPage : Page
+    public partial class RecordsMenu : UserControl
     {
-
-        public RecordsPage()
+        public RecordsMenu()
         {
             InitializeComponent();
         }

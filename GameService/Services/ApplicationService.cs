@@ -16,8 +16,7 @@ namespace GameService.Services
         public static IContainer Container { get; private set; }
         public ApplicationService()
         {
-           
-            #region builder setup
+
             var builder = new ContainerBuilder();
 
             builder.RegisterType<DataLayerService>().AsSelf().SingleInstance();
@@ -25,8 +24,6 @@ namespace GameService.Services
             builder.RegisterType<Player>().As<IPlayer>().SingleInstance();
 
             Container = builder.Build();
-           
-            #endregion
 
         }
        
