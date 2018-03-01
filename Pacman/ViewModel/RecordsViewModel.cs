@@ -17,7 +17,6 @@ namespace WpfApplication.ViewModel
     {
         public LayerService LayerService { get;private set; }
         public IPlayer Player { get; set; }
-        private const int countRowsInResult = 5;
         public RecordsViewModel()
         {
             LayerService=App.ViewContainer.Resolve<LayerService>();

@@ -28,7 +28,7 @@ namespace GameCore.Classes
             for (int i = 0; i < countPoints; i++)
             {
                 tempLenght = rnd.Next(4);//random branch lenght
-                if (rnd.Next(2) == 1)
+                if (rnd.Next(2) == 1)//random direction branch
                 {
                     positive = true;
                 }

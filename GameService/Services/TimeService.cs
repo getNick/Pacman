@@ -11,29 +11,31 @@ namespace GameService.Services
         public delegate bool TimeToStep();
         public event TimeToStep StepEvent;
         bool stopWorking = false;
-        public TimeService(IPacman pacman)
+        /// <summary>
+        /// Create and start StepEvent
+        /// </summary>
+        public TimeService()
         {
             worker = new BackgroundWorker();
             worker.DoWork += Worker_DoWork;
-            worker.RunWorkerCompleted += Worker_RunWorkerCompleted;
             worker.RunWorkerAsync();
         }
-
+        /// <summary>
+        /// Stop working, created new layer
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void StopWorking(object sender, EventArgs e)
         {
             stopWorking = true;
         }
 
-        private void Worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            Console.WriteLine("Worker stop");
-        }
 
         private void Worker_DoWork(object sender, DoWorkEventArgs e)
         {
             while (!stopWorking)
             {
-                Thread.Sleep(400);
+                Thread.Sleep(GameCore.EnumsAndConstant.GameConstants.PauseBetweenSteps);
                 StepEvent?.Invoke();
             }
         }

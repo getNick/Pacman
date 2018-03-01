@@ -47,7 +47,9 @@ namespace WpfApplication.ViewModel
             }
         }
         public string AssemblyPath
-        {
+        {/// <summary>
+         /// find current directory path
+         /// </summary>
             get
             {
                 string codeBase = Assembly.GetExecutingAssembly().CodeBase;
@@ -64,12 +66,16 @@ namespace WpfApplication.ViewModel
             Maze = LayerContainer.Resolve<IMaze>();
             Pacman = LayerContainer.Resolve<IPacman>();
             Player = LayerContainer.Resolve<IPlayer>();
-            Player.ChangeName(Properties.Settings.Default.UserName);
+            Player.ChangeName(Properties.Settings.Default.UserName);//set to player instance,saved on settings value
             ListEnemies = LayerContainer.Resolve<EnemyService>().ListEnemies;
             Pacman.PacmenDead += Pacman_PacmenDead;
             layerServ.LoadNewLayerEvent += LoadNewLayer;
             LayerNumber = layerServ.LayerNumber;
-        }
+        }/// <summary>
+        /// End layer event handler
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void LoadNewLayer(object sender, EventArgs e)
         {
             if (newLayerLoaded == false)
@@ -79,17 +85,24 @@ namespace WpfApplication.ViewModel
                 newLayerLoaded = true;
             }
         }
-
+        /// <summary>
+        /// Method PacmenDead event what display result
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Pacman_PacmenDead(object sender, EventArgs e)
         {
             ViewResult = true;
             OnPropertyChanged("ViewResult");
         }
 
-        public int TimeLeft { get; private set; } = 300;
 
         #region WellToBreaks
-
+        /// <summary>
+        /// Convertor walls to break
+        /// </summary>
+        /// <param name="walls"></param>
+        /// <returns>List<Vector></returns>
         private List<Vector> WallsToBricks(IEnumerable<Wall> walls)
         {
             List<Vector> list = new List<Vector>();
@@ -199,39 +212,25 @@ namespace WpfApplication.ViewModel
 
         #endregion
 
-        #region Score
-        public int Score { get; private set;}
-        RelayCommand _scoreIncCommand;
-        public ICommand ScoreInc
+        RelayCommand _newGameCommand;
+        public ICommand NewGameCommand
         {
             get
             {
-                if (_scoreIncCommand == null)
-                    _scoreIncCommand = new RelayCommand(ScoreIncCommand);
-                return _scoreIncCommand;
+                if (_newGameCommand == null)
+                    _newGameCommand = new RelayCommand(LoadNewGame);
+                return _newGameCommand;
             }
         }
-        private void ScoreIncCommand(object parameter)
+        private void LoadNewGame(object parameter)
         {
-            var currentPage = App.ViewContainer.Resolve<MainWindowViewModel>();
-            currentPage.CurrentPage = new MainGamePage();
+            if (newLayerLoaded == false)
+            {
+                var currentPage = App.ViewContainer.Resolve<MainWindowViewModel>();
+                currentPage.CurrentPage = new MainGamePage();
+                newLayerLoaded = true;
+            }
         }
-        #endregion
         
     }
-    /*class TestObject
-    {
-        public TestObject() { }
-        public TestObject(int x,int y,bool visible,string text)
-        {
-            X = x;
-            Y = y;
-            Visible = visible;
-            Text = text;
-        }
-        public int X { get; set; }
-        public int Y { get; set; }
-        public bool Visible { get; set; } = true;
-        public string Text { get; set; } = "lolololo";
-    }*/
 }

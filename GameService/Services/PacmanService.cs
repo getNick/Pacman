@@ -62,6 +62,7 @@ namespace GameService.Services
                 PacmenStepEvent?.Invoke();
                 OnPropertyChanged("Row");
                 OnPropertyChanged("Cell");
+                //dont eat gifts if invulnerable
                 if (_invulnerable == false)
                 {
                     UseGift();
@@ -69,7 +70,9 @@ namespace GameService.Services
                 return true;
             }
             return false;
-        }
+        }/// <summary>
+        /// Use Gifr if exist
+        /// </summary>
         private void UseGift()
         {
             var Path = Maze.Paths.First((x) => x.Row == this.Row & x.Cell == this.Cell);
@@ -80,7 +83,9 @@ namespace GameService.Services
                     EatingWorker.RunWorkerAsync();
                 }
             }
-        }
+        }/// <summary>
+        /// Decrement Lifes value,invoke PacmanDead and Pacman  Catch event
+        /// </summary>
         public void UseAdditionalLife()
         {
             if (Lifes == 0)
@@ -97,13 +102,21 @@ namespace GameService.Services
                 }
             }
         }
-
+        /// <summary>
+        /// event method what manages eating animation
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void Eate(object sender, DoWorkEventArgs e)
         {
             Eating = true;
             Thread.Sleep(GameCore.EnumsAndConstant.GameConstants.EatingTime);
             Eating = false;
-        }
+        }/// <summary>
+        /// event method what manages Invuilnerable pacmans state
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void InvulnerableWorkerMethod(object sender, DoWorkEventArgs e)
         {
             _invulnerable = true;

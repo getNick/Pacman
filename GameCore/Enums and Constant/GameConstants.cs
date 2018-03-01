@@ -15,6 +15,7 @@ namespace GameCore.EnumsAndConstant
         public const int PacmanCatchPause = 2000;//time which enemies don't hit pacman
         public const int EatingTime = 200;//animation eating
         public const int CountRowsInRecords = 5;
+        public const int PauseBetweenSteps = 400;//enemy steps
 
     }
 }

@@ -8,7 +8,9 @@ using System.Windows.Data;
 
 namespace WpfApplication.Utils
 {
-
+    /// <summary>
+    ///Converter Grid position to game
+    /// </summary>
     [ValueConversion(typeof(int), typeof(double))]
     class GridToPosZConverter : IValueConverter
     {

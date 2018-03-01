@@ -8,7 +8,10 @@ using System.Windows;
 using System.Windows.Data;
 
 namespace WpfApplication.Utils
-{
+{/// <summary>
+/// Inversive bool to visibility
+/// return Hidden if true
+/// </summary>
     [ValueConversion(typeof(bool), typeof(Visibility))]
     class InversBoolToVisibilityConv : IValueConverter
     {

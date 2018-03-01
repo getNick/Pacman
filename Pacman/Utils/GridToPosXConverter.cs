@@ -7,7 +7,9 @@ using System.Threading.Tasks;
 using System.Windows.Data;
 
 namespace WpfApplication.Utils
-{
+{/// <summary>
+///Converter Grid position to game
+/// </summary>
     [ValueConversion(typeof(int), typeof(double))]
     class GridToPosXConverter : IValueConverter
     {

@@ -7,7 +7,9 @@ using System.Threading.Tasks;
 using System.Windows.Data;
 
 namespace WpfApplication.Utils
-{
+{/// <summary>
+/// Convert maze height and width to grid size
+/// </summary>
     class CameraPosConverter : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, System.Globalization.CultureInfo culture)

@@ -21,7 +21,6 @@ namespace WpfApplication.ViewModel
         private const string NonRegister= "к сожелению,\n мы еще не знакомы";
         public bool NewPlayer { get; set; } = true;
         public string PlayerName { get; set; }
-        private Configuration config;
         public StartPageViewModel()
         {
             PlayerName = Properties.Settings.Default.UserName;
