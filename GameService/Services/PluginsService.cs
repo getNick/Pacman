@@ -33,7 +33,8 @@ namespace GameService.Services
                 .SelectMany(s => s.GetTypes())
                 .Where(p => type.IsAssignableFrom(p) & p.IsClass);
             return ListPlugins;
-        }/// <summary>
+        }
+        /// <summary>
          /// Select first finded suitable plugin
          /// </summary>
          /// <returns></returns>

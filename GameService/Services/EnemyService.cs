@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using GameCore.EnumsAndConstant;
 
 namespace GameService.Services
 {
@@ -14,24 +15,30 @@ namespace GameService.Services
     {
         public List<IEnemy> ListEnemies;
         Random random = new Random();
-        public EnemyService(int countEmenies,IMaze maze,IPacman pacman)
+        public EnemyService(int countEnemies,IMaze maze,IPacman pacman,TimeService timeService)
         {
+            if (countEnemies < 1) {
+                throw new ArgumentException("Count Enemies can't be less 1");
+            }
+            maze = maze ?? throw new ArgumentNullException("Maze");
+            pacman = pacman ?? throw new ArgumentNullException("Pacman");
+            timeService = timeService ?? throw new ArgumentNullException("TimeService");
+
             ListEnemies = new List<IEnemy>();
-            var timeService = LayerService.Container.Resolve<TimeService>();
             
-            for(int i = 0; i < countEmenies; i++)
+            for(int i = 0; i < countEnemies; i++)
             {
-                var pos = GetRandomEnemyPos(pacman,maze);
+                var pos = GetRandomEnemyPos(pacman,maze,(maze.Height+maze.Width)/2);
                 var enemy = LayerService.Container.Resolve<IEnemy>(
-                        new NamedParameter("row", pos.X ),
-                        new NamedParameter("cell", pos.Y)
+                        new NamedParameter(GameConstants.NamedParameterRow, pos.X ),
+                        new NamedParameter(GameConstants.NamedParameterCell, pos.Y),
+                        new NamedParameter(GameConstants.NamedParameterPacmanCatchPause,GameConstants.PacmanCatchPause)
                     );
                 timeService.StepEvent += new TimeService.TimeToStep(enemy.Step);
-
                 ListEnemies.Add(enemy);
             }
         }
-        public Vector GetRandomEnemyPos(IPacman pacman,IMaze maze)
+        private Vector GetRandomEnemyPos(IPacman pacman,IMaze maze,double dontNear)
         {
             int index;
             bool finded = false;
@@ -40,7 +47,7 @@ namespace GameService.Services
             {
                 index = random.Next(0, maze.Paths.Count());//random path index
                 var ramdomPos = maze.Paths.ElementAt(index);
-                if ((Math.Abs(pacman.Row - ramdomPos.Row) + Math.Abs(pacman.Cell - ramdomPos.Cell)) > maze.Height / 2)//but not near the pacman
+                if ((Math.Abs(pacman.Row - ramdomPos.Row) + Math.Abs(pacman.Cell - ramdomPos.Cell)) > dontNear)//but not near the pacman
                 {
                     finded = true;
                     pos.X = ramdomPos.Row;
@@ -48,7 +55,6 @@ namespace GameService.Services
                 }
             }
             return pos;
-
         }
     }
 }

@@ -17,6 +17,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WpfApplication.Utils;
 using WpfApplication.ViewModel;
+using WpfApplication.Resources.Models.Enums_and_Constants;
 
 namespace WpfApplication.Views
 {
@@ -29,153 +30,86 @@ namespace WpfApplication.Views
         {
             InitializeComponent();
             var context = ((MainGameViewModel)DataContext);
-
-            {
-                FileModelVisual3D fmv3D = new FileModelVisual3D();
-                fmv3D.Source = context.AssemblyPath + @"\Resources\Models\Pacman\pacman.obj";
-                var transformGroup = new Transform3DGroup();
-
-                Binding bindingAngleRot = new Binding();
-                var axisAngleRotation3D = new AxisAngleRotation3D();
-                axisAngleRotation3D.Axis = new Vector3D(0.0, 1.0, 0.0);
-                bindingAngleRot.Path = new PropertyPath("Direction");
-                bindingAngleRot.Source = context.Pacman;
-                bindingAngleRot.Converter = new DirectionToRotationConverter();
-                bindingAngleRot.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
-                BindingOperations.SetBinding(axisAngleRotation3D, AxisAngleRotation3D.AngleProperty, bindingAngleRot);
-                transformGroup.Children.Add(new RotateTransform3D(axisAngleRotation3D));
-
-                var scale = 0.1;
-                var translateTransform = new TranslateTransform3D();
-
-                Binding bindingX = new Binding();
-                bindingX.Path = new PropertyPath("Row");
-                bindingX.Source = context.Pacman;
-                bindingX.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
-                bindingX.Converter = new GridToPosXConverter();
-                BindingOperations.SetBinding(translateTransform, TranslateTransform3D.OffsetXProperty, bindingX);
-
-                Binding bindingZ = new Binding();
-                bindingZ.Path = new PropertyPath("Cell");
-                bindingZ.Source = context.Pacman;
-                bindingZ.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
-                bindingZ.Converter = new GridToPosZConverter();
-                BindingOperations.SetBinding(translateTransform, TranslateTransform3D.OffsetZProperty, bindingZ);
-
-                Binding binding = new Binding();
-                binding.Path = new PropertyPath("Eating");
-                binding.Source = context.Pacman;
-                binding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
-                binding.Converter = new InversBoolToVisibilityConv();
-                BindingOperations.SetBinding(fmv3D, FileModelVisual3D.VisibilityProperty, binding);
-
-                transformGroup.Children.Add(translateTransform);
-                transformGroup.Children.Add(new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(1.0, 0.0, 0.0), 90)));
-                transformGroup.Children.Add(new ScaleTransform3D(scale, scale, scale));
-                fmv3D.Transform = transformGroup;
-                Viewport.Children.Add(fmv3D);
-            }
-            {
-                FileModelVisual3D fmv3D = new FileModelVisual3D();
-                fmv3D.Source = context.AssemblyPath + @"\Resources\Models\Pacman\pacman2.obj";
-                var transformGroup = new Transform3DGroup();
-                Binding bindingAngleRot = new Binding();
-                var axisAngleRotation3D = new AxisAngleRotation3D();
-                axisAngleRotation3D.Axis = new Vector3D(0.0, 1.0, 0.0);
-                bindingAngleRot.Path = new PropertyPath("Direction");
-                bindingAngleRot.Source = context.Pacman;
-                bindingAngleRot.Converter = new DirectionToRotationConverter();
-                bindingAngleRot.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
-                BindingOperations.SetBinding(axisAngleRotation3D, AxisAngleRotation3D.AngleProperty, bindingAngleRot);
-                transformGroup.Children.Add(new RotateTransform3D(axisAngleRotation3D));
-                var scale = 0.1;
-                var translateTransform = new TranslateTransform3D();
-                Binding bindingX = new Binding();
-                bindingX.Path = new PropertyPath("Row");
-                bindingX.Source = context.Pacman;
-                bindingX.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
-                bindingX.Converter = new GridToPosXConverter();
-                BindingOperations.SetBinding(translateTransform, TranslateTransform3D.OffsetXProperty, bindingX);
-
-                Binding bindingZ = new Binding();
-                bindingZ.Path = new PropertyPath("Cell");
-                bindingZ.Source = context.Pacman;
-                bindingZ.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
-                bindingZ.Converter = new GridToPosZConverter();
-                BindingOperations.SetBinding(translateTransform, TranslateTransform3D.OffsetZProperty, bindingZ);
-
-                Binding binding = new Binding();
-                binding.Path = new PropertyPath("Eating");
-                binding.Source = context.Pacman;
-                binding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
-                binding.Converter = FindResource("ConverterBoolToVis") as BooleanToVisibilityConverter;
-                BindingOperations.SetBinding(fmv3D, FileModelVisual3D.VisibilityProperty, binding);
-
-                transformGroup.Children.Add(translateTransform);
-                transformGroup.Children.Add(new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(1.0, 0.0, 0.0), 90)));
-                transformGroup.Children.Add(new ScaleTransform3D(scale, scale, scale));
-                fmv3D.Transform = transformGroup;
-                Viewport.Children.Add(fmv3D);
-            }
-            foreach (var wall in context.ListBricks)
-            {
-                FileModelVisual3D fmv3D = new FileModelVisual3D();
-                fmv3D.Source = context.AssemblyPath + @"\Resources\Models\Wall\wall1.obj";
-                var transformGroup = new Transform3DGroup();
-                var scale = 0.1;
-                Vector3D vector = new Vector3D(wall.X * 15, 0.0, wall.Y * -15);
-                transformGroup.Children.Add(new TranslateTransform3D(vector));
-                transformGroup.Children.Add(new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(1.0, 0.0, 0.0), 90)));
-                transformGroup.Children.Add(new ScaleTransform3D(scale, scale, scale));
-                fmv3D.Transform = transformGroup;
-                Viewport.Children.Add(fmv3D);
-            }
-
+            LoadPathsAndWalls(context);
+            //pacman
+            var pacman = LoadModelPath(context,ViewConstants.PacmanModelPath);
+            pacman.Transform = LoadModelPositionScaleAndBaseRot(context, context.Pacman, 0.1);
+            Binding binding = new Binding();
+            binding.Path = new PropertyPath(ViewConstants.PropertyPathEating);
+            binding.Source = context.Pacman;
+            binding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+            binding.Converter = new InversBoolToVisibilityConv();
+            BindingOperations.SetBinding(pacman, FileModelVisual3D.VisibilityProperty, binding);
+            Viewport.Children.Add(pacman);
+            //EatingPacman
+            var eatingPacman = LoadModelPath(context, ViewConstants.EatingPacmanModelPath);
+            eatingPacman.Transform = LoadModelPositionScaleAndBaseRot(context, context.Pacman, 0.1);
+            Binding binding2 = new Binding();
+            binding2.Path = new PropertyPath(ViewConstants.PropertyPathEating);
+            binding2.Source = context.Pacman;
+            binding2.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+            binding2.Converter = FindResource("ConverterBoolToVis") as BooleanToVisibilityConverter;
+            BindingOperations.SetBinding(eatingPacman, FileModelVisual3D.VisibilityProperty, binding2);
+            Viewport.Children.Add(eatingPacman);
+            //Enemies
             foreach (var enemy in context.ListEnemies)
             {
-                FileModelVisual3D fmv3D = new FileModelVisual3D();
-                fmv3D.Source = context.AssemblyPath + @"\Resources\Models\Enemy\enemy.obj";
-                var transformGroup = new Transform3DGroup();
-                Binding bindingAngleRot = new Binding();
-                var axisAngleRotation3D = new AxisAngleRotation3D();
-                axisAngleRotation3D.Axis = new Vector3D(0.0, 1.0, 0.0);
-                bindingAngleRot.Path = new PropertyPath("Direction");
-                bindingAngleRot.Source = enemy;
-                bindingAngleRot.Converter = new DirectionToRotationConverter();
-                bindingAngleRot.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
-                BindingOperations.SetBinding(axisAngleRotation3D, AxisAngleRotation3D.AngleProperty, bindingAngleRot);
-                transformGroup.Children.Add(new RotateTransform3D(axisAngleRotation3D));
-                var scale = 0.1;
-                var translateTransform = new TranslateTransform3D();
-                Binding bindingX = new Binding();
-                bindingX.Path = new PropertyPath("Row");
-                bindingX.Source = enemy;
-                bindingX.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
-                bindingX.Converter = new GridToPosXConverter();
-                BindingOperations.SetBinding(translateTransform, TranslateTransform3D.OffsetXProperty, bindingX);
-
-                Binding bindingZ = new Binding();
-                bindingZ.Path = new PropertyPath("Cell");
-                bindingZ.Source = enemy;
-                bindingZ.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
-                bindingZ.Converter = new GridToPosZConverter();
-                BindingOperations.SetBinding(translateTransform, TranslateTransform3D.OffsetZProperty, bindingZ);
-
-                transformGroup.Children.Add(translateTransform);
-                transformGroup.Children.Add(new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(1.0, 0.0, 0.0), 90)));
-                transformGroup.Children.Add(new ScaleTransform3D(scale, scale, scale));
-                fmv3D.Transform = transformGroup;
-                Viewport.Children.Add(fmv3D);
+                var enemyModel = LoadModelPath(context, ViewConstants.EnemyModelPath);
+                enemyModel.Transform = LoadModelPositionScaleAndBaseRot(context, enemy, 0.1);
+                Viewport.Children.Add(enemyModel);
             }
+            Viewport.Focus();
 
+        }
+        FileModelVisual3D LoadModelPath(MainGameViewModel context, string path)
+        {
+            FileModelVisual3D fmv3D = new FileModelVisual3D();
+            fmv3D.Source = context.AssemblyPath + path;
+            return fmv3D;
+        }
+        Transform3DGroup LoadModelPositionScaleAndBaseRot(MainGameViewModel context,object Source,double scale)
+        {
+            var transformGroup = new Transform3DGroup();
+            Binding bindingAngleRot = new Binding();
+            var axisAngleRotation3D = new AxisAngleRotation3D();
+            axisAngleRotation3D.Axis = new Vector3D(0.0, 1.0, 0.0);
+            bindingAngleRot.Path = new PropertyPath(ViewConstants.PropertyPathDirection);
+            bindingAngleRot.Source = Source;
+            bindingAngleRot.Converter = new DirectionToRotationConverter();
+            bindingAngleRot.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+            BindingOperations.SetBinding(axisAngleRotation3D, AxisAngleRotation3D.AngleProperty, bindingAngleRot);
+            transformGroup.Children.Add(new RotateTransform3D(axisAngleRotation3D));
+
+            var translateTransform = new TranslateTransform3D();
+            Binding bindingX = new Binding();
+            bindingX.Path = new PropertyPath(ViewConstants.PropertyPathRow);
+            bindingX.Source = Source;
+            bindingX.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+            bindingX.Converter = new GridToPosXConverter();
+            BindingOperations.SetBinding(translateTransform, TranslateTransform3D.OffsetXProperty, bindingX);
+
+            Binding bindingZ = new Binding();
+            bindingZ.Path = new PropertyPath(ViewConstants.PropertyPathCell);
+            bindingZ.Source = Source;
+            bindingZ.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+            bindingZ.Converter = new GridToPosZConverter();
+            BindingOperations.SetBinding(translateTransform, TranslateTransform3D.OffsetZProperty, bindingZ);
+
+            transformGroup.Children.Add(translateTransform);
+            transformGroup.Children.Add(new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(1.0, 0.0, 0.0), 90)));
+            transformGroup.Children.Add(new ScaleTransform3D(scale, scale, scale));
+            return transformGroup;
+        }
+        void LoadPathsAndWalls(MainGameViewModel context)
+        {
             foreach (var path in context.Maze.Paths)
             {
                 FileModelVisual3D fmv3D = new FileModelVisual3D();
-                fmv3D.Source = context.AssemblyPath + @"\Resources\Models\Gift\defGift.obj";
+                fmv3D.Source = context.AssemblyPath +ViewConstants.GiftModelPath;
                 var transformGroup = new Transform3DGroup();
                 var scale = 0.1;
                 Binding binding = new Binding();
-                binding.Path = new PropertyPath("HaveGift");
+                binding.Path = new PropertyPath(ViewConstants.PropertyPathHaveGift);
                 binding.Source = path;
                 binding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
                 binding.Converter = FindResource("ConverterBoolToVis") as BooleanToVisibilityConverter;
@@ -187,9 +121,19 @@ namespace WpfApplication.Views
                 fmv3D.Transform = transformGroup;
                 Viewport.Children.Add(fmv3D);
             }
-            Viewport.Focus();
-
+            foreach (var wall in context.ListBricks)
+            {
+                FileModelVisual3D fmv3D = new FileModelVisual3D();
+                fmv3D.Source = context.AssemblyPath + ViewConstants.WallModelPath;
+                var transformGroup = new Transform3DGroup();
+                var scale = 0.1;
+                Vector3D vector = new Vector3D(wall.X * 15, 0.0, wall.Y * -15);
+                transformGroup.Children.Add(new TranslateTransform3D(vector));
+                transformGroup.Children.Add(new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(1.0, 0.0, 0.0), 90)));
+                transformGroup.Children.Add(new ScaleTransform3D(scale, scale, scale));
+                fmv3D.Transform = transformGroup;
+                Viewport.Children.Add(fmv3D);
+            }
         }
-
     }
 }

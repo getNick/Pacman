@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using GameCore.EnumsAndConstant;
 
 namespace GameService.Services
 {
@@ -24,6 +25,7 @@ namespace GameService.Services
                 OnPropertyChanged("Lifes");
             }
         }
+        private int _timeInvulnerable;
         private bool _invulnerable = false;
         private bool _eating = false;
         public bool Eating {
@@ -45,9 +47,10 @@ namespace GameService.Services
         BackgroundWorker EatingWorker;
         BackgroundWorker InvulnerableWorker;
 
-        public PacmanService(IMaze maze,int countLifes): base((int)maze.PacmenPespoint.X, (int)maze.PacmenPespoint.Y,maze)
+        public PacmanService(IMaze maze,int countLifes,int timeInvulnerable): base(GameConstants.PacmanRespointRow, GameConstants.PacmanRespointCell,maze)//TODO Constants
         {
             Lifes = countLifes;
+            _timeInvulnerable = timeInvulnerable;
             EatingWorker = new BackgroundWorker();
             InvulnerableWorker = new BackgroundWorker();
             EatingWorker.DoWork += Eate;
@@ -60,8 +63,6 @@ namespace GameService.Services
             if (base.Step())
             {
                 PacmenStepEvent?.Invoke();
-                OnPropertyChanged("Row");
-                OnPropertyChanged("Cell");
                 //dont eat gifts if invulnerable
                 if (_invulnerable == false)
                 {
@@ -70,7 +71,8 @@ namespace GameService.Services
                 return true;
             }
             return false;
-        }/// <summary>
+        }
+        /// <summary>
         /// Use Gifr if exist
         /// </summary>
         private void UseGift()
@@ -83,7 +85,8 @@ namespace GameService.Services
                     EatingWorker.RunWorkerAsync();
                 }
             }
-        }/// <summary>
+        }
+        /// <summary>
         /// Decrement Lifes value,invoke PacmanDead and Pacman  Catch event
         /// </summary>
         public void UseAdditionalLife()
@@ -110,7 +113,7 @@ namespace GameService.Services
         public void Eate(object sender, DoWorkEventArgs e)
         {
             Eating = true;
-            Thread.Sleep(GameCore.EnumsAndConstant.GameConstants.EatingTime);
+            Thread.Sleep(GameConstants.EatingTime);
             Eating = false;
         }/// <summary>
         /// event method what manages Invuilnerable pacmans state
@@ -120,7 +123,7 @@ namespace GameService.Services
         public void InvulnerableWorkerMethod(object sender, DoWorkEventArgs e)
         {
             _invulnerable = true;
-            Thread.Sleep(GameCore.EnumsAndConstant.GameConstants.PacmanCatchPause);
+            Thread.Sleep(_timeInvulnerable);
             _invulnerable = false;
         }
 

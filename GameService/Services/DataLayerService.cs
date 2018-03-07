@@ -1,31 +1,26 @@
 ﻿using GameCore.Classes;
 using GameCore.Interfaces;
 using GameDataLayer.Interfaces;
-using GameDataLayer.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameService.Services
 {
     public class DataLayerService
     {
         public IUnitOfWork UnitOfWork { get; set; }
-        public DataLayerService()
+        public DataLayerService(IUnitOfWork unitOfWork)
         {
-            UnitOfWork = new EFUnitOfWork("Records");
+            UnitOfWork = unitOfWork ?? throw new ArgumentNullException("UnitOfWork");
         }
         public void AddRecord(IPlayer player)
         {
-            var Player = player as Player;
-            if (Player != null)
+            if (player is Player Player)
             {
                 UnitOfWork.PlayersRepository.Create(Player);
                 UnitOfWork.Save();
             }
-            
         }
         public IEnumerable<IPlayer> GetTop(int count)
         {

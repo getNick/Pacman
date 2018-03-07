@@ -12,8 +12,6 @@ namespace GameCore.Interfaces
         int Width { get;}
         IEnumerable<Wall> Walls { get;}
         IEnumerable<Path> Paths { get;}
-        Vector EnemyRespoint { get; }
-        Vector PacmenPespoint { get; }
         bool StepTo(int i, int j);
     }
 }

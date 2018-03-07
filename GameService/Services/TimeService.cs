@@ -5,7 +5,7 @@ using System.Threading;
 
 namespace GameService.Services
 {
-    class TimeService
+    public class TimeService
     {
         private readonly BackgroundWorker worker;
         public delegate bool TimeToStep();

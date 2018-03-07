@@ -20,11 +20,11 @@
             <ColumnDefinition Width="2*"></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <TextBlock Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize="25"> Выберите сложность</TextBlock>
+        <TextBlock Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize="25" Text="{DynamicResource m_selectDifficulty}"/>
         <ListBox Grid.Row="1" Grid.Column="1" Height="200"  Margin="0,32.2,0,343.6" FontSize="20"
                  ItemsSource="{Binding Path=ListPluginsName,UpdateSourceTrigger=PropertyChanged}" 
                  SelectedItem="{Binding Path=SelectedPlugin, Mode=TwoWay}"/>
-        <Button Grid.Row="1" Grid.Column="1" Content="Выбрать" FontSize="20"  Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
+        <Button Grid.Row="1" Grid.Column="1" Content="{DynamicResource m_Accept}" FontSize="20"  Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
                 Command="{Binding SelectPluginCommand}" Margin="0,237.2,0,195.6" Height="Auto"></Button>
     </Grid>
 </Page>

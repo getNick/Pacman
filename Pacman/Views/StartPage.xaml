@@ -9,7 +9,7 @@
       d:DesignHeight="770" d:DesignWidth="720"
       Title="StartPage">
     <Page.DataContext>
-        <local:StartPageViewModel></local:StartPageViewModel>
+        <local:StartPageViewModel ></local:StartPageViewModel>
     </Page.DataContext>
     <Grid>
         <Grid.RowDefinitions>
@@ -25,33 +25,57 @@
             <ColumnDefinition />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <TextBlock Grid.Row="1" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center" Name="HelloText" Foreground="Black" FontSize="25"
-            Text="{Binding Path=PlayerName, StringFormat='Привет, {0}', UpdateSourceTrigger=PropertyChanged}" TextAlignment="Center" Height="70" Margin="0,68.6,0,31.8" Width="360" Grid.Column="1"/>
+        <Menu Background="White" Width="150">
+            <MenuItem Header="{DynamicResource m_menuLanguage}" ItemsSource="{Binding Languages}" Background="White" FontSize="20">
+                <MenuItem.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding DisplayName}"/>
+                    </DataTemplate>
+                </MenuItem.ItemTemplate>
+                <MenuItem.ItemContainerStyle>
+                    <Style TargetType="{x:Type MenuItem}">
+                        <Setter Property="Command" Value="{Binding RelativeSource={RelativeSource AncestorType=ItemsControl},
+                             Path=DataContext.ChangeLanguageCommand}"/>
+                        <Setter Property="CommandParameter" Value="{Binding}" />
+                    </Style>
+                </MenuItem.ItemContainerStyle>
+            </MenuItem>
+        </Menu>
+        
+
+        <TextBlock Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center" Name="HelloText" Foreground="Black" FontSize="25"
+             TextAlignment="Center" Height="45" Margin="0,172,0,86.4" Width="360" Grid.Column="1" Grid.RowSpan="2">
+                <Run Text="{DynamicResource m_Hello}"/>
+                <Run Text="{Binding Path=PlayerName, UpdateSourceTrigger=PropertyChanged}"/>
+        </TextBlock>
+        <TextBlock Grid.Row="1" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black" FontSize="25"
+             TextAlignment="Center" Height="90" Margin="0,70.8,0,15.4" Width="360" Grid.Column="1"
+                   IsEnabled="{c:Binding NewPlayer,UpdateSourceTrigger=PropertyChanged}" Visibility="{c:Binding NewPlayer,FalseToVisibility=Hidden,UpdateSourceTrigger=PropertyChanged}">
+                     <Run Text="{DynamicResource m_WeDontFamiliar}"/>
+        </TextBlock>
 
         <Button Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"  FontSize="20"
                Visibility="{c:Binding !NewPlayer, FalseToVisibility=Hidden, UpdateSourceTrigger=PropertyChanged}"
                 Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
-                Command="{Binding ResetNameCommand}" Margin="66,21.2,66,9">
-            Это не я
-        </Button>
+                Command="{Binding ResetNameCommand}" Margin="66,21.2,66,9"
+                Content="{DynamicResource m_ItsNotMyName}"/>
+
         <Button Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2"  FontSize="20"   
                Visibility="{c:Binding !NewPlayer, FalseToVisibility=Hidden, UpdateSourceTrigger=PropertyChanged}"
                 Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
-                Command="{Binding StartGameCommand}" Margin="66,19,66,19.6">
-            Начать игру
-        </Button>
+                Command="{Binding StartGameCommand}" Margin="66,19,66,19.6"
+                Content="{DynamicResource m_StartGame}"/>
+
 
         <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="1"  FontSize="20"  
-                 x:Name="Field" Text="{Binding Path=PlayerName,Mode=OneWayToSource}"
+                 x:Name="Field" Text="{Binding Path=PlayerName,Mode=TwoWay}"
                  Visibility="{c:Binding NewPlayer, FalseToVisibility=Hidden}"
                  Margin="0,174.8,0,19" Grid.RowSpan="2"></TextBox>
 
         <Button Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="1"  FontSize="20"
             Visibility="{c:Binding NewPlayer, FalseToVisibility=Hidden, UpdateSourceTrigger=PropertyChanged}"
                 Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
-             Command="{Binding SetNameCommand}" Margin="0,21.6,0,10" >
-            Запомнить
-        </Button>
-
+             Command="{Binding SetNameCommand}" Margin="0,21.6,0,10"
+                Content="{DynamicResource m_RememberMe}"/>
     </Grid>
 </Page>

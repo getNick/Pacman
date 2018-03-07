@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using GameCore.EnumsAndConstant;
 
 
 namespace GameCore.Classes
@@ -16,7 +17,7 @@ namespace GameCore.Classes
         public RandomBlock()
         {
             List<Wall> figure = new List<Wall>();
-            int lenght = rnd.Next(3, 5);//random block lenghts
+            int lenght = rnd.Next(GameConstants.MinRandomBlockLength,GameConstants.MaxRandomBlockLength);
             for (int i = 0; i < lenght; i++)
             {
                 figure.Add(new Wall(i, 0));
@@ -27,8 +28,8 @@ namespace GameCore.Classes
             bool positive = false;
             for (int i = 0; i < countPoints; i++)
             {
-                tempLenght = rnd.Next(4);//random branch lenght
-                if (rnd.Next(2) == 1)//random direction branch
+                tempLenght = rnd.Next(GameConstants.MinRandomBlockBranchLength,GameConstants.MaxRandomBlockBranchLength);
+                if (rnd.Next(2) == 1)
                 {
                     positive = true;
                 }

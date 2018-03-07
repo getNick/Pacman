@@ -10,6 +10,7 @@ using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
+using WpfApplication.Resources.Models.Enums_and_Constants;
 using WpfApplication.Utils;
 using WpfApplication.Views;
 
@@ -33,7 +34,20 @@ namespace WpfApplication.ViewModel
         public IPacman Pacman { get; set; }
         public IEnumerable<IEnemy> ListEnemies{get;set;}
         private bool newLayerLoaded = false;
-        public bool ViewResult { get; set; }
+        private bool _viewResult = false;
+        public string HeartsImagePath { get; set; }
+        public bool ViewResult
+        {
+            get
+            {
+                return _viewResult;
+            }
+            set
+            {
+                _viewResult = value;
+                OnPropertyChanged("ViewResult");
+            }
+        }
         private int _layerNumber = 0;
         public int LayerNumber {
             get
@@ -61,6 +75,7 @@ namespace WpfApplication.ViewModel
 
         public MainGameViewModel()
         {
+            HeartsImagePath = ViewConstants.HeartsImagePath;
             var layerServ = App.ViewContainer.Resolve<LayerService>();
             var LayerContainer = layerServ.LoadLayer();
             Maze = LayerContainer.Resolve<IMaze>();
@@ -71,7 +86,8 @@ namespace WpfApplication.ViewModel
             Pacman.PacmenDead += Pacman_PacmenDead;
             layerServ.LoadNewLayerEvent += LoadNewLayer;
             LayerNumber = layerServ.LayerNumber;
-        }/// <summary>
+        }
+        /// <summary>
         /// End layer event handler
         /// </summary>
         /// <param name="sender"></param>
@@ -93,7 +109,6 @@ namespace WpfApplication.ViewModel
         private void Pacman_PacmenDead(object sender, EventArgs e)
         {
             ViewResult = true;
-            OnPropertyChanged("ViewResult");
         }
 
 
@@ -227,7 +242,7 @@ namespace WpfApplication.ViewModel
             if (newLayerLoaded == false)
             {
                 var currentPage = App.ViewContainer.Resolve<MainWindowViewModel>();
-                currentPage.CurrentPage = new MainGamePage();
+                currentPage.CurrentPage = new SelectPluginPage();
                 newLayerLoaded = true;
             }
         }

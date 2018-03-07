@@ -17,7 +17,7 @@ namespace WpfApplication.Utils
         public object Convert(object value, Type targetType, object parameter,
             System.Globalization.CultureInfo culture)
         {
-            return ((int)value) * -15.0;
+            return ((int)value) * -WpfApplication.Resources.Models.Enums_and_Constants.ViewConstants.OneTailSize;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

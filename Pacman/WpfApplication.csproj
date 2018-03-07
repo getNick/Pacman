@@ -116,6 +116,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Models\Record.cs" />
+    <Compile Include="Resources\Models\Enums and Constants\ViewConstants.cs" />
     <Compile Include="Utils\CameraPosConverter.cs" />
     <Compile Include="Utils\CountLifesToCollection.cs" />
     <Compile Include="Utils\DirectionToRotationConverter.cs" />
@@ -142,6 +143,14 @@
     <Compile Include="Views\StartWindow.xaml.cs">
       <DependentUpon>StartWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="Resources\lang.ru-RU.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\lang.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MainGamePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

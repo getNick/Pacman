@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GameCore.EnumsAndConstant;
 
 namespace GameService.Services
 {
@@ -40,7 +41,8 @@ namespace GameService.Services
             Player = ApplicationService.Container.Resolve<IPlayer>();
             Task t = GetRecordsAsync();
 
-        }/// <summary>
+        }
+        /// <summary>
         /// Async reques to db and set in ListRecords collection
         /// </summary>
         /// <returns></returns>
@@ -49,10 +51,11 @@ namespace GameService.Services
              await Task.Run(() =>
             {
                 var dataLayer = ApplicationService.Container.Resolve<DataLayerService>();
-                ListRecords = dataLayer.GetTop(GameCore.EnumsAndConstant.GameConstants.CountRowsInRecords).ToList();
+                ListRecords = dataLayer.GetTop(GameConstants.CountRowsInRecords).ToList();
             });
 
-        }/// <summary>
+        }
+        /// <summary>
         /// Generate new layer
         /// </summary>
         /// <returns>Autofac.Container</returns>
@@ -71,10 +74,14 @@ namespace GameService.Services
             builder.RegisterInstance(Player).As<IPlayer>();
 
             builder.RegisterType<MazeService>().As<IMaze>()
-                    .WithParameter(new NamedParameter("height", GameCore.EnumsAndConstant.GameConstants.MazeHeight))
-                    .WithParameter(new NamedParameter("width", GameCore.EnumsAndConstant.GameConstants.MazeWidth))
-                    .SingleInstance();
-            builder.RegisterType<PacmanService>().As<IPacman>().WithParameter(new TypedParameter(typeof(int), GameCore.EnumsAndConstant.GameConstants.PacmanLifes)).SingleInstance();
+                .WithParameter(new NamedParameter(GameConstants.NamedParameterMazeHeight, GameConstants.MazeHeight))
+                .WithParameter(new NamedParameter(GameConstants.NamedParameterMazeWidth, GameConstants.MazeWidth))
+                .SingleInstance();
+
+            builder.RegisterType<PacmanService>().As<IPacman>()
+                .WithParameter(new NamedParameter(GameConstants.NamedParameterPacmanCountLifes, GameConstants.PacmanLifes))
+                .WithParameter(new NamedParameter(GameConstants.NamedParameterPacmanTimeInvulnerable, GameConstants.PacmanCatchPause))
+                .SingleInstance();
 
             builder.RegisterType<Enemy>().As<IEnemy>();
 
@@ -92,12 +99,13 @@ namespace GameService.Services
 
 
             builder.RegisterType<GiftsService>()
-                .WithParameter(new NamedParameter("player", Player));
+                .WithParameter(new NamedParameter(GameConstants.NamedParameterPlayer, Player));
 
             Container = builder.Build();
 
             //Save layer target
             var gifts = Container.Resolve<GiftsService>();
+            gifts.SetGifts();
             GiftsToNextLayer+= gifts.GiftsCount;
             //add event Score update
             Player.PropertyChanged += Player_PropertyChanged;
@@ -108,7 +116,6 @@ namespace GameService.Services
             var Pacman = Container.Resolve<IPacman>();
             Pacman.PacmenDead += PacmanDead;
             Pacman.PacmenDead+= timeServ.StopWorking;
-            
             return Container;
         }
         /// <summary>
@@ -122,7 +129,7 @@ namespace GameService.Services
 
             var DataLayer = ApplicationService.Container.Resolve<DataLayerService>();
             DataLayer.AddRecord(Player);
-            if (ListRecords.Count >= GameCore.EnumsAndConstant.GameConstants.CountRowsInRecords)
+            if (ListRecords.Count >= GameConstants.CountRowsInRecords)
             {
                 int minRecord = ListRecords.Min(x => x.Score);
                 if (minRecord < Player.Score)
@@ -146,7 +153,7 @@ namespace GameService.Services
         /// <param name="e"></param>
         private void Player_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "Score")
+            if (e.PropertyName == GameConstants.PropertyScore)
             {
                 if (Player.Score == GiftsToNextLayer)
                 {

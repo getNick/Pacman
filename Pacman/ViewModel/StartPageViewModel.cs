@@ -12,15 +12,40 @@ using Autofac;
 using GameCore.Interfaces;
 using System.IO;
 using GameService.Services;
+using System.Globalization;
 
 namespace WpfApplication.ViewModel
 {
-    class StartPageViewModel:ViewModelBase
+    class StartPageViewModel : ViewModelBase
     {
-       
-        private const string NonRegister= "к сожелению,\n мы еще не знакомы";
-        public bool NewPlayer { get; set; } = true;
-        public string PlayerName { get; set; }
+        public IEnumerable<CultureInfo> Languages { get; set; }
+        private bool _newPlayer = true;
+        public bool NewPlayer
+        {
+            get
+            {
+                return _newPlayer;
+            }
+            set
+            {
+                _newPlayer = value;
+                OnPropertyChanged("NewPlayer");
+            }
+        }
+
+        private string _playerName;
+        public string PlayerName
+        {
+            get
+            {
+                return _playerName;
+            }
+            set
+            {
+                _playerName = value;
+                OnPropertyChanged("PlayerName");
+            }
+        }
         public StartPageViewModel()
         {
             PlayerName = Properties.Settings.Default.UserName;
@@ -30,9 +55,29 @@ namespace WpfApplication.ViewModel
             }
             else
             {
-                PlayerName = NonRegister;
+                NewPlayer = true;
+            }
+            Languages = App.Languages;
+            
+        }
+
+        RelayCommand _changeLanguage;
+        public ICommand ChangeLanguageCommand
+        {
+            get
+            {
+                if (_changeLanguage == null)
+                    _changeLanguage = new RelayCommand(ChangeLanguage);
+                return _changeLanguage;
             }
         }
+        private void ChangeLanguage(object parameter)
+        {
+            var lang = parameter as CultureInfo;
+            App.Language = lang;
+            Console.WriteLine(lang.DisplayName);
+        }
+
 
         #region SetName
         RelayCommand _setName;
@@ -52,8 +97,6 @@ namespace WpfApplication.ViewModel
                 return;
             }
             NewPlayer = false;
-            OnPropertyChanged("PlayerName");
-            OnPropertyChanged("NewPlayer");
         }
 
         #endregion
@@ -70,10 +113,8 @@ namespace WpfApplication.ViewModel
         }
         private void ResetName(object parameter)
         {
-            PlayerName = NonRegister;
+            PlayerName = "";
             NewPlayer = true;
-            OnPropertyChanged("PlayerName");
-            OnPropertyChanged("NewPlayer");
         }
         #endregion
 

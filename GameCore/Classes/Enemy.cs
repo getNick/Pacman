@@ -13,15 +13,17 @@ namespace GameCore.Classes
         public IPursueAlgo PursueAlgo { get; private set; }
         private bool EnemisOnPause = false;
         private BackgroundWorker worker;
+        private int _pacmanCatchPause;
 
-        public Enemy(int row, int cell, IMaze maze,IPacman pacman,IPursueAlgo pursueAlgo) : base(row, cell, maze)
+        public Enemy(int row, int cell,int pacmanCatchPause, IMaze maze,IPacman pacman,IPursueAlgo pursueAlgo) : base(row, cell, maze)
         {
             Pacman = pacman ?? throw new ArgumentNullException("Pacman");
             PursueAlgo = pursueAlgo ?? throw new ArgumentNullException("PursueAlgo");
+            _pacmanCatchPause = pacmanCatchPause;
             Pacman.PacmenStepEvent += new PacmenStep(PacmanSteps);
             Pacman.PacmenCatch += new EventHandler(PacmanCatch);
             worker = new BackgroundWorker();
-            worker.DoWork += EnemisStoped;
+            worker.DoWork += EnemiesStoped;
         }
 
         private void PacmanCatch(object sender, EventArgs e)
@@ -32,10 +34,10 @@ namespace GameCore.Classes
             }
         }
 
-        private void EnemisStoped(object sender, DoWorkEventArgs e)
+        private void EnemiesStoped(object sender, DoWorkEventArgs e)
         {
             EnemisOnPause = true;
-            Thread.Sleep(GameCore.EnumsAndConstant.GameConstants.PacmanCatchPause);
+            Thread.Sleep(_pacmanCatchPause);
             EnemisOnPause = false;
         }
 
@@ -65,8 +67,6 @@ namespace GameCore.Classes
             Direction = PursueAlgo.NextStepDirection(new Vector(Row, Cell), new Vector(Pacman.Row, Pacman.Cell));
             if (base.Step())
             {
-                OnPropertyChanged("Row");
-                OnPropertyChanged("Cell");
                 return true;
             }
             return false;

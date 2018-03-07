@@ -16,11 +16,7 @@ namespace GameService.Services
         public int Height { get; set; }
         public int Width { get; set; }
         public IEnumerable<Wall> Walls { get; set; }
-        public IPlayer Player { get; set; }
         public IEnumerable<Path> Paths { get; set; }
-
-        public Vector EnemyRespoint { get; set; }
-        public Vector PacmenPespoint { get; set; } = new Vector(1, 1);
         public MazeService(int height, int width)
         {
             Height = height;
@@ -100,7 +96,8 @@ namespace GameService.Services
                     }
                 }
             }
-        }/// <summary>
+        }
+        /// <summary>
         /// set Path around block
         /// </summary>
         /// <param name="maze"></param>
@@ -134,7 +131,8 @@ namespace GameService.Services
                     }
                 }
             }
-        }/// <summary>
+        }
+        /// <summary>
         /// Try set block to Maze
         /// </summary>
         /// <param name="maze"></param>
@@ -161,7 +159,8 @@ namespace GameService.Services
                 wall.Cell += j;
             }
             return true;
-        }/// <summary>
+        }
+        /// <summary>
         /// set maze border
         /// </summary>
         /// <param name="maze"></param>
@@ -186,12 +185,13 @@ namespace GameService.Services
                 maze[i, columns - 2] = new Path(i, columns - 2);
             }
 
-        }/// <summary>
+        }
+        /// <summary>
         /// Return all walls on maze
         /// </summary>
         /// <param name="maze"></param>
         /// <returns></returns>
-        public IEnumerable<Wall> GetWalls(GameObject[,] maze)
+        private IEnumerable<Wall> GetWalls(GameObject[,] maze)
         {
             List<Wall> listWall = new List<Wall>();
             int rows = maze.GetUpperBound(0) + 1;
@@ -200,20 +200,20 @@ namespace GameService.Services
             {
                 for (int j = 0; j < columns; j++)
                 {
-                    var wall = maze[i, j] as Wall;
-                    if (wall != null)
+                    if (maze[i, j] is Wall wall)
                     {
                         listWall.Add(wall);
                     }
                 }
             }
             return listWall;
-        }/// <summary>
+        }
+        /// <summary>
         /// Return All Paths on maze
         /// </summary>
         /// <param name="maze"></param>
         /// <returns></returns>
-        public IEnumerable<Path> GetPaths(GameObject[,] maze)
+        private IEnumerable<Path> GetPaths(GameObject[,] maze)
         {
             List<Path> listPath = new List<Path>();
             int rows = maze.GetUpperBound(0) + 1;
@@ -222,8 +222,7 @@ namespace GameService.Services
             {
                 for (int j = 0; j < columns; j++)
                 {
-                    var path = maze[i, j] as Path;
-                    if (path != null)
+                    if (maze[i, j] is Path path)
                     {
                         listPath.Add(path);
                     }

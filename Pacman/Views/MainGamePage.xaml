@@ -32,13 +32,15 @@
         </Grid.ColumnDefinitions>
 
         <Button Name="ButtonNewGame" Grid.Row="0" Grid.Column="0" VerticalAlignment="Bottom" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" 
-                BorderThickness="0" Foreground="White" FontSize="18" Content="New game" VerticalContentAlignment="Center"
-            Command="{Binding ScoreInc}" >
+                BorderThickness="0" Foreground="White" FontSize="18" Content="{DynamicResource m_NewGame}" VerticalContentAlignment="Center"
+            Command="{Binding NewGameCommand}" >
         </Button>
-        <TextBlock Grid.Row="0" Grid.Column="1"  VerticalAlignment="Center" HorizontalAlignment="Center" Name="ScoreText" Foreground="White" FontSize="25"
-            Text="{Binding Path=Player.Score, StringFormat='Score: {0}', UpdateSourceTrigger=PropertyChanged}" >
+        <TextBlock Grid.Row="0" Grid.Column="1"  VerticalAlignment="Center" HorizontalAlignment="Center" Name="ScoreText" Foreground="White" FontSize="25">
+            <Run Text="{DynamicResource m_Score}"/>
+            <Run Text="{Binding Path=Player.Score, UpdateSourceTrigger=PropertyChanged}"/>
         </TextBlock>
-        <ListBox  Name="Hearts" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left" BorderThickness="0"  Background="Black"  ItemsSource="{Binding Path=Pacman.Lifes,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource CountLifesToCollection}}">
+        <ListBox  Name="Hearts" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left" BorderThickness="0"  Background="Black"  
+                  ItemsSource="{Binding Path=Pacman.Lifes,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource CountLifesToCollection}}">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="{x:Type ListBoxItem}">
                     <Setter Property="IsEnabled" Value="False"/>
@@ -51,12 +53,14 @@
             </ListBox.ItemsPanel>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Image Height="25" Width="25" Source="../Resources/Images/heart.png"></Image>
+                    <Image Height="25" Width="25" Source="{Binding RelativeSource={RelativeSource AncestorType=ItemsControl},
+                             Path=DataContext.HeartsImagePath}"></Image>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <TextBlock Grid.Row="0" Grid.Column="3"  VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" FontSize="25"
-            Text="{Binding Path=LayerNumber, StringFormat='Layer: {0}', UpdateSourceTrigger=PropertyChanged}" >
+        <TextBlock Grid.Row="0" Grid.Column="3"  VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" FontSize="25">
+            <Run Text="{DynamicResource m_Layer}"/>
+            <Run Text="{Binding Path=LayerNumber, UpdateSourceTrigger=PropertyChanged}"/>
         </TextBlock>
         <Popup 
                
@@ -78,10 +82,8 @@
         </TextBox>
 
 
-        <h:HelixViewport3D Name="Viewport" Focusable="True"   Grid.Row="1" Grid.ColumnSpan="4" Background="White" IsZoomEnabled="True" IsMoveEnabled="False" IsPanEnabled="True" IsRotationEnabled="True" ShowViewCube="False">
-
-
-
+        <h:HelixViewport3D Name="Viewport" Focusable="True"   Grid.Row="1" Grid.ColumnSpan="4" Background="White" IsZoomEnabled="True" 
+            IsMoveEnabled="False" IsPanEnabled="True" IsRotationEnabled="True" ShowViewCube="False">
             <h:HelixViewport3D.DefaultCamera >
                 <PerspectiveCamera Position="12 0 20"  LookDirection="0,10,-20" NearPlaneDistance="10.0" FarPlaneDistance="500" FieldOfView="80">
 
@@ -89,7 +91,8 @@
             </h:HelixViewport3D.DefaultCamera>
             <h:SunLight />
 
-            <h:GridLinesVisual3D Width="{c:Binding Path=Maze.Height*1.5-1}" Length="{c:Binding Path=Maze.Width*1.5-1}" MinorDistance="1.5" MajorDistance="1.5" Thickness="0.01"  Center="{Binding ElementName=CenteredLines,Path=Text,UpdateSourceTrigger=PropertyChanged}"/>
+            <h:GridLinesVisual3D Width="{c:Binding Path=Maze.Height*1.5-1}" Length="{c:Binding Path=Maze.Width*1.5-1}" MinorDistance="1.5" 
+                MajorDistance="1.5" Thickness="0.01"  Center="{Binding ElementName=CenteredLines,Path=Text,UpdateSourceTrigger=PropertyChanged}"/>
         </h:HelixViewport3D>
 
     </Grid>

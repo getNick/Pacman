@@ -7,7 +7,19 @@ namespace GameCore.Classes
     public class Path : GameObject,INotifyPropertyChanged
     {
         private IGift Gift { get; set;}
-        public bool HaveGift { get; private set; } = false;
+        private bool _haveGift = false;
+        public bool HaveGift
+        {
+            get
+            {
+                return _haveGift;
+            }
+            set
+            {
+                _haveGift = value;
+                OnPropertyChanged("HaveGift");
+            }
+        }
         public Path(int row, int cell) : base(row, cell)
         {
            
@@ -16,7 +28,6 @@ namespace GameCore.Classes
         {
             Gift = gift ?? throw new ArgumentNullException("Gift");
             HaveGift = true;
-            OnPropertyChanged("HaveGift");
         }
         public bool UseGift()
         {
@@ -24,7 +35,6 @@ namespace GameCore.Classes
             {
                 Gift.Activate();
                 HaveGift = false;
-                OnPropertyChanged("HaveGift");
                 return true;
             }
             return false;

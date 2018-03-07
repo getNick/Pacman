@@ -8,8 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System.Configuration;
-
 namespace WpfApplication.Properties {
     
     
@@ -25,16 +23,27 @@ namespace WpfApplication.Properties {
             }
         }
         
-        [global::System.Configuration.UserScopedSetting()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string UserName {
             get {
                 return ((string)(this["UserName"]));
             }
-            set
-            {
+            set {
                 this["UserName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("en-US")]
+        public global::System.Globalization.CultureInfo DefaultLanguage {
+            get {
+                return ((global::System.Globalization.CultureInfo)(this["DefaultLanguage"]));
+            }
+            set {
+                this["DefaultLanguage"] = value;
             }
         }
     }

@@ -25,17 +25,22 @@
             <ColumnDefinition Width="2*"></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <TextBlock Grid.Row="0" Text="{Binding Path=Player.Score,UpdateSourceTrigger=PropertyChanged,StringFormat='Поздравляю, ты набрал : {0} очков'}" 
-                   FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center" Height="53" Width="720" Margin="0,24,0,10.2" TextAlignment="Center" RenderTransformOrigin="0.5,0.5" Grid.ColumnSpan="3"/>
-        <TextBlock Grid.Row="1" Grid.Column="1" Text="ТОП 5 результатов" 
+        <TextBlock Grid.Row="0" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center" Height="53" Width="720"
+                   Margin="0,24,0,10.2" TextAlignment="Center" RenderTransformOrigin="0.5,0.5" Grid.ColumnSpan="3">
+            <Run Text="{DynamicResource m_CongratulationResult}"/>
+            <Run Text="{Binding Path=Player.Score,UpdateSourceTrigger=PropertyChanged}" />
+            <Run Text="{DynamicResource m_Points}"/>
+        </TextBlock>
+        <TextBlock Grid.Row="1" Grid.Column="1" Text="{DynamicResource m_Top5}" 
                    FontSize="20" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Top"  Height="40"></TextBlock>
         <Grid Grid.Row="1" Grid.Column="1" Margin="0,44.8,0,5.8">
             <DataGrid VerticalAlignment="Top"  RowBackground="White" AlternatingRowBackground="LightGray" GridLinesVisibility="Horizontal" BorderThickness="0" 
-                      IsHitTestVisible="False" RowHeight="40" IsReadOnly="True" CanUserSortColumns="False" CanUserResizeColumns="False" x:Name="DataGrid" Foreground="Black"  
-                      ItemsSource="{Binding Path=LayerService.ListRecords,UpdateSourceTrigger=PropertyChanged}" EnableRowVirtualization="False" AutoGenerateColumns="False" Background="Transparent" FontSize="16">
+                      IsHitTestVisible="False" RowHeight="40" IsReadOnly="True" CanUserSortColumns="False" CanUserResizeColumns="False" 
+                      x:Name="DataGrid" Foreground="Black" ItemsSource="{Binding Path=LayerService.ListRecords,UpdateSourceTrigger=PropertyChanged}" 
+                      EnableRowVirtualization="False" AutoGenerateColumns="False" Background="Transparent" FontSize="16">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Width="2*" Header="Имя" Binding="{Binding Name}"></DataGridTextColumn>
-                    <DataGridTextColumn Width="*" Header="Счет" Binding="{Binding Score}"></DataGridTextColumn>
+                    <DataGridTextColumn Width="2*" Header="{DynamicResource m_ResultName}" Binding="{Binding Name}"></DataGridTextColumn>
+                    <DataGridTextColumn Width="*" Header="{DynamicResource m_ResultScore}" Binding="{Binding Score}"></DataGridTextColumn>
                 </DataGrid.Columns>
                 <DataGrid.ColumnHeaderStyle>
                     <Style TargetType="{x:Type DataGridColumnHeader}">
@@ -53,11 +58,11 @@
         </Grid>
 
 
-        <Button Grid.Row="1" Grid.Column="1" Content="Попробовать еще раз" FontSize="18" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
-                Command="{Binding TryAganCommand}" Margin="0,295,0,95.4" Grid.RowSpan="3"></Button>
-        <Button Grid.Row="3" Grid.Column="1" Content="Сменить уровень сложности" FontSize="18" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
+        <Button Grid.Row="2" Grid.Column="1" Content="{DynamicResource m_TryAgain}" FontSize="18" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
+                Command="{Binding TryAganCommand}" ></Button>
+        <Button Grid.Row="3" Grid.Column="1" Content="{DynamicResource m_ChangeDifficult}" FontSize="18" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
                 Command="{Binding ChangeDifficultCommand}" Margin="0,2.8,0,83.2" Grid.RowSpan="2"></Button>
-        <Button Grid.Row="4" Grid.Column="1" Content="Выйти" FontSize="18" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
+        <Button Grid.Row="4" Grid.Column="1" Content="{DynamicResource m_Exit}" FontSize="18" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
                 Command="{Binding ExitCommand}" Margin="0,0.6,0,7.2"/>
     </Grid>
 </UserControl>
