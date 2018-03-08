@@ -67,6 +67,8 @@
     <Compile Include="GiftsServiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MazeServiceTests.cs" />
+    <Compile Include="DataLayerServiceTests.cs" />
+    <Compile Include="PacmanServiceTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

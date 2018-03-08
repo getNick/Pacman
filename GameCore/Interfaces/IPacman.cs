@@ -13,6 +13,7 @@ namespace GameCore.Interfaces
         int Lifes { get; }
         void UseAdditionalLife();
         bool Eating { get;}
+        bool IsDead { get;}
         event EventHandler PacmenDead;
         event PacmenStep PacmenStepEvent;
         event EventHandler PacmenCatch;

@@ -33,7 +33,7 @@ namespace WpfApplication.Views
             LoadPathsAndWalls(context);
             //pacman
             var pacman = LoadModelPath(context,ViewConstants.PacmanModelPath);
-            pacman.Transform = LoadModelPositionScaleAndBaseRot(context, context.Pacman, 0.1);
+            pacman.Transform = LoadModelPositionScaleAndBaseRot(context, context.Pacman);
             Binding binding = new Binding();
             binding.Path = new PropertyPath(ViewConstants.PropertyPathEating);
             binding.Source = context.Pacman;
@@ -43,19 +43,19 @@ namespace WpfApplication.Views
             Viewport.Children.Add(pacman);
             //EatingPacman
             var eatingPacman = LoadModelPath(context, ViewConstants.EatingPacmanModelPath);
-            eatingPacman.Transform = LoadModelPositionScaleAndBaseRot(context, context.Pacman, 0.1);
+            eatingPacman.Transform = LoadModelPositionScaleAndBaseRot(context, context.Pacman);
             Binding binding2 = new Binding();
             binding2.Path = new PropertyPath(ViewConstants.PropertyPathEating);
             binding2.Source = context.Pacman;
             binding2.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
-            binding2.Converter = FindResource("ConverterBoolToVis") as BooleanToVisibilityConverter;
+            binding2.Converter = FindResource(ViewConstants.ResourceNameConverterBoolToVisibility) as BooleanToVisibilityConverter;
             BindingOperations.SetBinding(eatingPacman, FileModelVisual3D.VisibilityProperty, binding2);
             Viewport.Children.Add(eatingPacman);
             //Enemies
             foreach (var enemy in context.ListEnemies)
             {
                 var enemyModel = LoadModelPath(context, ViewConstants.EnemyModelPath);
-                enemyModel.Transform = LoadModelPositionScaleAndBaseRot(context, enemy, 0.1);
+                enemyModel.Transform = LoadModelPositionScaleAndBaseRot(context, enemy);
                 Viewport.Children.Add(enemyModel);
             }
             Viewport.Focus();
@@ -67,7 +67,7 @@ namespace WpfApplication.Views
             fmv3D.Source = context.AssemblyPath + path;
             return fmv3D;
         }
-        Transform3DGroup LoadModelPositionScaleAndBaseRot(MainGameViewModel context,object Source,double scale)
+        Transform3DGroup LoadModelPositionScaleAndBaseRot(MainGameViewModel context,object Source)
         {
             var transformGroup = new Transform3DGroup();
             Binding bindingAngleRot = new Binding();
@@ -97,7 +97,7 @@ namespace WpfApplication.Views
 
             transformGroup.Children.Add(translateTransform);
             transformGroup.Children.Add(new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(1.0, 0.0, 0.0), 90)));
-            transformGroup.Children.Add(new ScaleTransform3D(scale, scale, scale));
+            transformGroup.Children.Add(new ScaleTransform3D(ViewConstants.ScaleAll, ViewConstants.ScaleAll, ViewConstants.ScaleAll));
             return transformGroup;
         }
         void LoadPathsAndWalls(MainGameViewModel context)
@@ -107,17 +107,16 @@ namespace WpfApplication.Views
                 FileModelVisual3D fmv3D = new FileModelVisual3D();
                 fmv3D.Source = context.AssemblyPath +ViewConstants.GiftModelPath;
                 var transformGroup = new Transform3DGroup();
-                var scale = 0.1;
                 Binding binding = new Binding();
                 binding.Path = new PropertyPath(ViewConstants.PropertyPathHaveGift);
                 binding.Source = path;
                 binding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
-                binding.Converter = FindResource("ConverterBoolToVis") as BooleanToVisibilityConverter;
+                binding.Converter = FindResource(ViewConstants.ResourceNameConverterBoolToVisibility) as BooleanToVisibilityConverter;
                 BindingOperations.SetBinding(fmv3D, FileModelVisual3D.VisibilityProperty, binding);
-                Vector3D vector = new Vector3D(path.Row * 15, 7.5, path.Cell * -15);
+                Vector3D vector = new Vector3D(path.Row * ViewConstants.OneTailSize, ViewConstants.GiftsYPos, path.Cell * -ViewConstants.OneTailSize);
                 transformGroup.Children.Add(new TranslateTransform3D(vector));
                 transformGroup.Children.Add(new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(1.0, 0.0, 0.0), 90)));
-                transformGroup.Children.Add(new ScaleTransform3D(scale, scale, scale));
+                transformGroup.Children.Add(new ScaleTransform3D(ViewConstants.ScaleAll, ViewConstants.ScaleAll, ViewConstants.ScaleAll));
                 fmv3D.Transform = transformGroup;
                 Viewport.Children.Add(fmv3D);
             }
@@ -126,11 +125,10 @@ namespace WpfApplication.Views
                 FileModelVisual3D fmv3D = new FileModelVisual3D();
                 fmv3D.Source = context.AssemblyPath + ViewConstants.WallModelPath;
                 var transformGroup = new Transform3DGroup();
-                var scale = 0.1;
-                Vector3D vector = new Vector3D(wall.X * 15, 0.0, wall.Y * -15);
+                Vector3D vector = new Vector3D(wall.X * ViewConstants.OneTailSize, 0.0, wall.Y * -ViewConstants.OneTailSize);
                 transformGroup.Children.Add(new TranslateTransform3D(vector));
                 transformGroup.Children.Add(new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(1.0, 0.0, 0.0), 90)));
-                transformGroup.Children.Add(new ScaleTransform3D(scale, scale, scale));
+                transformGroup.Children.Add(new ScaleTransform3D(ViewConstants.ScaleAll, ViewConstants.ScaleAll, ViewConstants.ScaleAll));
                 fmv3D.Transform = transformGroup;
                 Viewport.Children.Add(fmv3D);
             }

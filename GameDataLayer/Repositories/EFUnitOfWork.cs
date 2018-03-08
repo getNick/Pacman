@@ -1,5 +1,6 @@
 ﻿using GameDataLayer.EF;
 using GameDataLayer.Interfaces;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -11,24 +12,38 @@ namespace GameDataLayer.Repositories
 {
     public class EFUnitOfWork : IUnitOfWork
     {
+        private static Logger logger = LogManager.GetLogger("fileLogger");
         private readonly DbContext _dbContext;
         private bool _disposed;
         private PlayersRepository _playersRepository;
 
-        public PlayersRepository PlayersRepository
+        public virtual PlayersRepository PlayersRepository
         {
             get { return _playersRepository ?? (_playersRepository = new PlayersRepository(_dbContext)); }
         }
 
         public EFUnitOfWork(string connectionString)
         {
-            _dbContext = new PlayersContext(connectionString);
+            try
+            {
+                _dbContext = new PlayersContext(connectionString);
+            }catch(Exception ex)
+            {
+                logger.Error(ex);
+            }
         }
 
 
         public void Save()
         {
-            _dbContext.SaveChanges();
+            try
+            {
+                _dbContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex);
+            }
         }
         public void Dispose()
         {

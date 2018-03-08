@@ -1,18 +1,17 @@
 ﻿using GameCore.Classes;
 using GameCore.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using GameCore.EnumsAndConstant;
+using NLog;
 
 namespace GameService.Services
 {
     public class PacmanService : MoveObject, IPacman
     {
+        private static Logger logger = LogManager.GetLogger("fileLogger");
         private int _lifes;
         public int Lifes {
             get
@@ -40,6 +39,8 @@ namespace GameService.Services
             }
         }
 
+        public bool IsDead { get; private set; }
+
         public event PacmenStep PacmenStepEvent;
         public event EventHandler PacmenDead;
         public event EventHandler PacmenCatch;
@@ -47,7 +48,7 @@ namespace GameService.Services
         BackgroundWorker EatingWorker;
         BackgroundWorker InvulnerableWorker;
 
-        public PacmanService(IMaze maze,int countLifes,int timeInvulnerable): base(GameConstants.PacmanRespointRow, GameConstants.PacmanRespointCell,maze)//TODO Constants
+        public PacmanService(IMaze maze,int countLifes,int timeInvulnerable): base(GameConstants.PacmanRespointRow, GameConstants.PacmanRespointCell,maze)
         {
             Lifes = countLifes;
             _timeInvulnerable = timeInvulnerable;
@@ -62,6 +63,7 @@ namespace GameService.Services
         {
             if (base.Step())
             {
+                logger.Info($"Pacman steps to {Row},{Cell}");
                 PacmenStepEvent?.Invoke();
                 //dont eat gifts if invulnerable
                 if (_invulnerable == false)
@@ -94,6 +96,7 @@ namespace GameService.Services
             if (Lifes == 0)
             {
                 PacmenDead?.Invoke(this, new EventArgs());
+                IsDead = true;
             }
             else
             {

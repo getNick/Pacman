@@ -9,12 +9,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GameCore.EnumsAndConstant;
+using NLog;
 
 namespace GameService.Services
 {
     public class LayerService: INotifyPropertyChanged
     {
-        public static Autofac.IContainer Container { get; private set; }
+        private static Logger logger = LogManager.GetLogger("fileLogger");
+        public static Autofac.IContainer Container { get; set; }
         public  int LayerNumber { get;private set; }
         private  int GiftsToNextLayer;
         private IPlayer Player;
@@ -40,7 +42,6 @@ namespace GameService.Services
             applicationService = new ApplicationService();
             Player = ApplicationService.Container.Resolve<IPlayer>();
             Task t = GetRecordsAsync();
-
         }
         /// <summary>
         /// Async reques to db and set in ListRecords collection
@@ -48,12 +49,14 @@ namespace GameService.Services
         /// <returns></returns>
         async Task GetRecordsAsync()
         {
+            logger.Info("Request to db");
+            var startTime = DateTime.Now;
              await Task.Run(() =>
             {
                 var dataLayer = ApplicationService.Container.Resolve<DataLayerService>();
                 ListRecords = dataLayer.GetTop(GameConstants.CountRowsInRecords).ToList();
             });
-
+            logger.Info($"End request, spend time: {(DateTime.Now - startTime).Milliseconds} milliseconds");
         }
         /// <summary>
         /// Generate new layer
@@ -126,9 +129,10 @@ namespace GameService.Services
         /// <param name="e"></param>
         private void PacmanDead(object sender, EventArgs e)
         {
-
+            logger.Info("Pacman is dead");
             var DataLayer = ApplicationService.Container.Resolve<DataLayerService>();
             DataLayer.AddRecord(Player);
+            logger.Info($"Write to db {Player.Name} {Player.Score}");
             if (ListRecords.Count >= GameConstants.CountRowsInRecords)
             {
                 int minRecord = ListRecords.Min(x => x.Score);

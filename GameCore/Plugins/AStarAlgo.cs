@@ -1,5 +1,6 @@
 ﻿using GameCore.EnumsAndConstant;
 using GameCore.Interfaces;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ namespace GameCore.Plagins
 {
     public class AStarAlgo : IPursueAlgo
     {
+        private static Logger logger = LogManager.GetLogger("fileLogger");
         public IMaze Maze { get;private set; }
         private Queue<Tail> QueSteps;
 
@@ -28,12 +30,14 @@ namespace GameCore.Plagins
             if (QueSteps.Count == 0)
             {
                 GetNextSteps(rnd.Next(15), from, to, QueSteps);
+                logger.Info($"PursueAlgo generate next {QueSteps.Count} steps from {from.X},{from.Y} to {to.X},{to.Y}");
             }
             if (QueSteps.Count == 0)
             {
                 return Direction.Left;
             }
             var temp = QueSteps.Dequeue();
+            logger.Info($"Enemy steps from {from.X},{from.Y} to {temp.Rows},{temp.Cell}");
             if (temp.Rows > from.X)
             {
                 return Direction.Up;

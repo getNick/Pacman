@@ -9,6 +9,7 @@ namespace GameCore.Classes
 {
     public class Enemy : MoveObject,IEnemy
     {
+        private static Logger logger = LogManager.GetLogger("fileLogger");
         public IPacman Pacman { get; private set; }
         public IPursueAlgo PursueAlgo { get; private set; }
         private bool EnemisOnPause = false;
@@ -37,8 +38,10 @@ namespace GameCore.Classes
         private void EnemiesStoped(object sender, DoWorkEventArgs e)
         {
             EnemisOnPause = true;
+            logger.Info("Enemies on pause");
             Thread.Sleep(_pacmanCatchPause);
             EnemisOnPause = false;
+            logger.Info("Enemies pause is over");
         }
 
         private bool PacmanSteps()
@@ -64,10 +67,13 @@ namespace GameCore.Classes
             {
                 Pacman.UseAdditionalLife();
             }
-            Direction = PursueAlgo.NextStepDirection(new Vector(Row, Cell), new Vector(Pacman.Row, Pacman.Cell));
-            if (base.Step())
+            if (!Pacman.IsDead)
             {
-                return true;
+                Direction = PursueAlgo.NextStepDirection(new Vector(Row, Cell), new Vector(Pacman.Row, Pacman.Cell));
+                if (base.Step())
+                {
+                    return true;
+                }
             }
             return false;
         }

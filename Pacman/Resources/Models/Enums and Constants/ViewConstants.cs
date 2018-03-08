@@ -15,6 +15,7 @@ namespace WpfApplication.Resources.Models.Enums_and_Constants
         public const string PropertyPathCell = "Cell";
         public const string PropertyPathHaveGift = "HaveGift";
         public const string PropertyPathDirection = "Direction";
+        public const string ResourceNameConverterBoolToVisibility = "ConverterBoolToVis";
         public static string EnLanguagePath { get; set; }
         public static string RuLanguagePath { get; set; }
         public static string LanguageBasePath { get; set; }
@@ -24,6 +25,9 @@ namespace WpfApplication.Resources.Models.Enums_and_Constants
         public static string WallModelPath { get; set; }
         public static string GiftModelPath { get; set; }
         public static string HeartsImagePath { get; set; }
+        public static double ScaleAll { get; set; }
+        public static double GiftsYPos { get; set; }
         public static int OneTailSize = 15;
+       
     }
 }

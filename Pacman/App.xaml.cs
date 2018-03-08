@@ -98,6 +98,8 @@ namespace WpfApplication
             ViewConstants.EnemyModelPath = ConfigurationManager.AppSettings.Get("EnemyModelPath");
             ViewConstants.GiftModelPath = ConfigurationManager.AppSettings.Get("GiftModelPath");
             ViewConstants.WallModelPath = ConfigurationManager.AppSettings.Get("WallModelPath");
+            ViewConstants.ScaleAll = Double.Parse(ConfigurationManager.AppSettings.Get("ScaleAll"));
+            ViewConstants.GiftsYPos=Double.Parse(ConfigurationManager.AppSettings.Get("GiftsYPos"));
 
         }
         private void App_LanguageChanged(Object sender, EventArgs e)
